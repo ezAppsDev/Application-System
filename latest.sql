@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 06, 2019 at 10:06 PM
+-- Generation Time: Dec 06, 2019 at 10:39 PM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -78,7 +78,7 @@ CREATE TABLE `settings` (
   `id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL DEFAULT 'Application System',
   `discord_webhook` text DEFAULT NULL,
-  `app_accept_message` text NOT NULL DEFAULT 'Your application has been accepted!'
+  `app_accept_message` varchar(355) NOT NULL DEFAULT '''Your application has been accepted!'''
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --

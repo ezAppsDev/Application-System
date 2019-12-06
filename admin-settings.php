@@ -21,10 +21,10 @@ if (isset($_POST['updateSettings'])) {
     $app_accepted  = strip_tags(nl2br($_POST['app_accepted']));
 
     $sql = "UPDATE settings SET name = ? WHERE id = ?";
-    $pdo->prepare($sql)->execute([$site_name, $_SESSION['app_id']]); 
+    $pdo->prepare($sql)->execute([$site_name, '1']); 
 
     $sql = "UPDATE settings SET app_accept_message = ? WHERE id = ?";
-    $pdo->prepare($sql)->execute([$app_accepted, $_SESSION['app_id']]); 
+    $pdo->prepare($sql)->execute([$app_accepted, '1']); 
 
     notify('success', 'Settings updated.', '/admin/settings');
 }
