@@ -5,7 +5,16 @@ Firstly, thank you for checking out ezApps! ezApps was built with simplicity in 
 If you need support installing or have another issue, we ask that you join our discord at https://discord.io/ezApps
 
 # Bugs
-If you find a bug, please report it using GitHub's "Issues" feature.
+If you find a bug, please report it using GitHub's "Issues" feature. *Please ensure you choose the correct label "Bug" when creating the issue, or it'll be closed.*
+
+# Suggestion
+If you have a suggestion, please suggest it using GitHub's "issues" feature. *Please ensure you choose the correct label "Suggestion" when creating the issue, or it'll be closed.*
+
+# Requirements
+- A host (Including Windows servers, or linux)
+- PHP 7.0 or above
+- A MySQL Server
+- Full database access
 
 # Installation 
 - Download the latest release
