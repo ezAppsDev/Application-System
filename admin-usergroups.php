@@ -122,8 +122,7 @@ if (isset($_POST['updateUsergroup'])) {
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <input type="text" class="form-control" name="name"
-                                                                    id="name" placeholder="Usergroup Name"
-                                                                    required>
+                                                                    id="name" placeholder="Usergroup Name" required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -170,8 +169,8 @@ if (isset($_POST['updateUsergroup'])) {
                 </div>
 
                 <!-- Edit Usergroup Modal -->
-                <div class="modal fade" id="GroupEditorModal" tabindex="-1" role="dialog" aria-labelledby="GroupEditorModal"
-                    aria-hidden="true">
+                <div class="modal fade" id="GroupEditorModal" tabindex="-1" role="dialog"
+                    aria-labelledby="GroupEditorModal" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">

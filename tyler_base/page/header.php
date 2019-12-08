@@ -15,7 +15,7 @@
         <link href="/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link href="/assets/plugins/font-awesome/css/all.min.css" rel="stylesheet">
 
-        <?php if($page['name'] === 'View Applications'): ?>
+        <?php if($page['name'] === 'View Applications' || $page['name'] === 'User Management'): ?>
         <link href="//cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet">
         <?php endif; ?>
       
