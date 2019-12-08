@@ -23,8 +23,7 @@
                             <i class="material-icons">more_vert</i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a class="dropdown-item" href="#">Account</a></li>
-                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><a class="dropdown-item" href="/user?id=<?php echo $_SESSION['user_id']; ?>">Account</a></li>
                             <li class="divider"></li>
                             <li><a class="dropdown-item" href="/logout">Log Out</a></li>
 
