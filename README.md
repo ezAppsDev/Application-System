@@ -22,6 +22,7 @@ If you have a suggestion, please suggest it using GitHub's "issues" feature. *Pl
 - Head into the folder "tyler_base" --> "global"
 - Rename "connect.default.php" to "connect.php"
 - In "connect.php", edit the fields to match your MySQL database connection info.
+- Now, in "config.php", edit the field "$domain = 'http://localhost/test';" to match your domain
 - In PHPMyAdmin, Upload the file "latest.sql" inside "sql"
 - You may now delete the entire folder "sql" after you've uploaded it to the database.
 - Navigate to your web url, and create an account.
