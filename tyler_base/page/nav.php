@@ -10,7 +10,10 @@
                 <li>
                     <a href="/apply"><i class="material-icons">assignment</i>Apply</a>
                 </li>
-
+                <hr>
+                <li>
+                    <a href="/thank-you"><i class="material-icons">star</i>Credit</a>
+                </li>
                 <?php if (super_admin === 'true'): ?>
                 <li class="sidebar-title">
                 Admin
