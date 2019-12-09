@@ -1,6 +1,3 @@
-# ---ezApps IS STILL UNDER DEVELOPMENT, AND IS ONLY UPLOADED FOR TESTING PURPOSES. DO NOT USE IF YOU AREN'T INSTRUCTED.---
-
-
 # Welcome
 Firstly, thank you for checking out ezApps! ezApps was built with simplicity in mind. The development team has worked extremely hard to make everything for the user both admin and regular easy as easy as possible.
 
