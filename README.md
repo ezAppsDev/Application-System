@@ -32,5 +32,7 @@ The first account created should always automatically be assigned admin permissi
 - In PHPMyAdmin, Direct to the "users" table
 - Find your user, and change your "usergroup" to "2"
 
+If you still are having trouble installing or need support, Join our discord https://discord.io/ezApps
+
 # Donations
 Donations are not required, but are appreciated. Join our discord for more information on how to donate!
