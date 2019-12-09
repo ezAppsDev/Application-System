@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2019 at 05:50 PM
+-- Generation Time: Dec 09, 2019 at 08:33 PM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -65,7 +65,8 @@ CREATE TABLE `applications` (
   `name` varchar(64) NOT NULL,
   `status` enum('OPEN','CLOSED','ON-HOLD') NOT NULL DEFAULT 'OPEN',
   `created` text NOT NULL,
-  `format` text NOT NULL
+  `format` text NOT NULL,
+  `description` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
