@@ -83,7 +83,7 @@ $dbCount['applicants'] = $pdo->query('select count(*) from applicants')->fetchCo
                                                         echo '<td><span class="badge badge-success">ACCEPTED</span></td>';
                                                     }
                                                     echo '<td>'.$appDB['created'].'</td>';
-                                                    echo '<td><a class="btn btn-primary btn-sm" href="./app?id='.$appDB['id'].'" role="button">View</a></td></tr>';
+                                                    echo '<td><a class="btn btn-primary btn-sm" href="'.DOMAIN.'/app?id='.$appDB['id'].'" role="button">View</a></td></tr>';
                                                 }
                                             ?>
                                         </tbody>

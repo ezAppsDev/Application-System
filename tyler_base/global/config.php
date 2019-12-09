@@ -3,6 +3,7 @@ $version = '1.0.0';
 $assets_ver = '01';
 require_once 'functions.php';
 
+//EDIT THIS TO YOUR DOMAIN. DO NOT INCLUDE A TRAILING SLASH
 $domain = 'http://localhost/test';
 define("DOMAIN", $domain);
 

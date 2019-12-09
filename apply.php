@@ -72,7 +72,7 @@ if (isset($_POST['applyApp'])) {
                                                 
                                                 foreach ($appsDB as $appDB) {
                                                     echo '<tr><td>'.$appDB['name'].'</td>';
-                                                    echo '<td><a class="btn btn-success btn-sm openApplyModal" href="javascript:void(0);" data-href="../../../tyler_base/ajax/admin/applications/apply.php?appID='.$appDB['id'].'" role="button">Apply</a></td></tr>';
+                                                    echo '<td><a class="btn btn-success btn-sm openApplyModal" href="javascript:void(0);" data-href="'.DOMAIN.'/tyler_base/ajax/admin/applications/apply.php?appID='.$appDB['id'].'" role="button">Apply</a></td></tr>';
                                                 }
                                             ?>
                                         </tbody>

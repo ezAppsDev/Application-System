@@ -63,7 +63,7 @@ if (super_admin === 'false') {
                                                     echo '<td>'.$userDB['display_name'].'</td>';
                                                     echo '<td>'.$usersgroupDB['name'].'</td>';
                                                     echo '<td>'.$userDB['joined'].'</td>';
-                                                    echo '<td><a class="btn btn-primary btn-sm" href="./user?id='.$userDB['id'].'" role="button">Profile</a></td></tr>';
+                                                    echo '<td><a class="btn btn-primary btn-sm" href="'.DOMAIN.'/user?id='.$userDB['id'].'" role="button">Profile</a></td></tr>';
                                                 }
                                             ?>
                                         </tbody>
