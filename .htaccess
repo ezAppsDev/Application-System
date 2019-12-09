@@ -1,4 +1,4 @@
-Options -Indexes
+Options -Indexes +FollowSymLinks -MultiViews
 
 RewriteEngine On
 RewriteRule ^(.*)/$ /$1 [L,R=301]

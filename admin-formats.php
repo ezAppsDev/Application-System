@@ -55,6 +55,7 @@ if (isset($_POST['updateApp'])) {
     //Sanitize
     $app_name     = strip_tags($_POST['app_name']);
     $app_status     = strip_tags($_POST['app_status']);
+    $app_desc  = strip_tags(nl2br($_POST['app_desc']));
     $app_format  = strip_tags(nl2br($_POST['app_format']));
 
     if ($_SESSION['editing_app_name'] <> $app_name) {
@@ -65,19 +66,24 @@ if (isset($_POST['updateApp'])) {
         if ($can_result['num'] > 0) {
             notify('danger', 'Application name already in-use.', '/admin/formats');
         } else {
-            $sql2 = "UPDATE applications SET name = ? WHERE id = ?";
-            $pdo->prepare($sql2)->execute([$app_name, $_SESSION['editing_app']]); 
+            $sql = "UPDATE applications SET name = ? WHERE id = ?";
+            $pdo->prepare($sql)->execute([$app_name, $_SESSION['editing_app']]); 
         }
     }
 
     if ($_SESSION['editing_app_status'] <> $app_status) {
-        $sql2 = "UPDATE applications SET status = ? WHERE id = ?";
-        $pdo->prepare($sql2)->execute([$app_status, $_SESSION['editing_app']]); 
+        $sql = "UPDATE applications SET status = ? WHERE id = ?";
+        $pdo->prepare($sql)->execute([$app_status, $_SESSION['editing_app']]); 
+    }
+
+    if ($_SESSION['editing_app_desc'] <> $app_desc) {
+        $sql = "UPDATE applications SET description = ? WHERE id = ?";
+        $pdo->prepare($sql)->execute([$app_desc, $_SESSION['editing_app']]); 
     }
 
     if ($_SESSION['editing_app_format'] <> $app_format) {
-        $sql2 = "UPDATE applications SET format = ? WHERE id = ?";
-        $pdo->prepare($sql2)->execute([$app_format, $_SESSION['editing_app']]); 
+        $sql = "UPDATE applications SET format = ? WHERE id = ?";
+        $pdo->prepare($sql)->execute([$app_format, $_SESSION['editing_app']]); 
     }
 
     notify('success', 'Application format updated.', '/admin/formats');

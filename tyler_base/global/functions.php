@@ -96,3 +96,17 @@ function notify($errortype, $errormsg, $location) {
     header('Location: '.$location.'');
     exit();
 }
+
+function apps() {
+    global $version;
+    if(!isset($_COOKIE['apps'])) {
+        $json = file_get_contents("https://raw.githubusercontent.com/ezAppsDev/Application-System/master/version.json");
+        $curVer = json_decode($json);
+        $newVer = $curVer->version;
+        if ($newVer > $version) {
+            phpAlert("Oops. It seems that the version of ezApps this website runs is outdated. The ezApps development team does not support use of out dated software due to security reasons. If you are the website owner, please update the software as soon as possible at https://github.com/ezAppsDev/Application-System");
+        } else {
+            setcookie("apps", 'set', time()+60);
+        }
+    }
+}

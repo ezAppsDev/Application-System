@@ -15,6 +15,7 @@ $_SESSION['editing_app'] = $appID;
 $_SESSION['editing_app_name'] = $appInfo['name'];
 $_SESSION['editing_app_status'] = $appInfo['status'];
 $_SESSION['editing_app_format'] = $appInfo['format'];
+$_SESSION['editing_app_desc'] = $appInfo['description'];
 ?>
 
 <!DOCTYPE html>
@@ -41,6 +42,10 @@ $_SESSION['editing_app_format'] = $appInfo['format'];
                         <option value="CLOSED">CLOSED</option>
                         <option value="ON-HOLD">ON-HOLD</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label for="app_format">Application Description</label>
+                    <textarea class="form-control" rows="4" name="app_desc" id="app_desc" placeholder="Application Description (or Requirements)" required><?php echo $appInfo['description']; ?></textarea>
                 </div>
                 <div class="form-group">
                     <label for="app_format">Application Format</label>

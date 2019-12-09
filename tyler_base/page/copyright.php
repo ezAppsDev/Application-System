@@ -12,7 +12,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <span class="footer-text"><?php echo $year; ?> © <a href="https://discord.io/ezApps">Tyler Development Services</a></span>
+                        <span class="footer-text float-left" id="kep"><?php echo $year; ?> © Made by <a href="https://discord.io/ezApps">Tyler</a></span>
+                        <span class="footer-text float-right" id="ripl"><a href="https://github.com/ezAppsDev/Application-System">v<?php echo $version; ?></a></span>
                     </div>
                 </div>
             </div>

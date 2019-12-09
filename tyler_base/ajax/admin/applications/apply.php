@@ -15,6 +15,7 @@ $_SESSION['applying_for'] = $appID;
 $_SESSION['applying_for_name'] = $appInfo['name'];
 $_SESSION['applying_for_status'] = $appInfo['status'];
 $_SESSION['applying_for_format'] = $appInfo['format'];
+$_SESSION['applying_for_desc'] = $appInfo['description'];
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +39,12 @@ $_SESSION['applying_for_format'] = $appInfo['format'];
                     <label for="app_name">Application Name</label>
                     <input type="text" class="form-control" value="<?php echo $appInfo['name']; ?>" required disabled>
                 </div>
+                <?php if($appInfo['description'] <> NULL || $appInfo['description'] <> ""): ?>
+                    <div class="alert alert-info m-b-lg" role="alert">
+                        <strong>Application Description:</strong><hr>
+                        <?php echo nl2br($appInfo['description']); ?>
+                    </div>
+                <?php endif; ?>
                 <div class="form-group">
                     <label for="app_format">Application Format</label>
                     <textarea class="form-control" rows="12" name="app_format" id="app_format" placeholder="Application Format" required><?php echo $appInfo['format']; ?></textarea>

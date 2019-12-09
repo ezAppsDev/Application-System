@@ -14,7 +14,7 @@ $configRow = $stmt_gconfig->fetch(PDO::FETCH_ASSOC);
 
 $config['name'] = $configRow['name'];
 $config['app_accept_message'] = $configRow['app_accept_message'];
-
+apps();
 $user_ip = getUserIP();
 $date = date('Y-m-d');
 $year = date('Y');
