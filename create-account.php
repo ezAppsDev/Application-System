@@ -13,32 +13,32 @@ if (isset($_POST['register'])) {
 
     if (isset($_POST['ageCheck'])) {
         if ($password <> $passwordc) {
-            notify('danger', 'Your passwords do not match.', '/create-account');
+            notify('danger', 'Your passwords do not match.', DOMAIN.'/create-account');
         } elseif (strlen($password) < 8) {
-            notify('danger', 'Your password must be longer than 8 characters.', '/create-account');
+            notify('danger', 'Your password must be longer than 8 characters.', DOMAIN.'/create-account');
         } elseif (!preg_match("#[0-9]+#", $password)) {
-            notify('danger', 'Your password must include at least one number.', '/create-account');
+            notify('danger', 'Your password must include at least one number.', DOMAIN.'/create-account');
         } elseif (!preg_match("#[a-zA-Z]+#", $password)) {
-            notify('danger', 'Your password must include at least one letter.', '/create-account');
+            notify('danger', 'Your password must include at least one letter.', DOMAIN.'/create-account');
         } else {
             $sql       = "SELECT COUNT(display_name) AS num FROM users WHERE display_name = ?";
             $stmt      = $pdo->prepare($sql);
             $stmt->execute([$display_name]);
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($row['num'] > 0) {
-                notify('danger', 'Display name already taken.', '/create-account');
+                notify('danger', 'Display name already taken.', DOMAIN.'/create-account');
             } else {
                 $passwordHash = password_hash($password, PASSWORD_BCRYPT, array("cost" => 12));
                 $sql1          = "INSERT INTO users (display_name, password, joined) VALUES (?,?,?)";
                 $stmt1         = $pdo->prepare($sql1);
                 $result_user   = $stmt1->execute([$display_name, $passwordHash, $us_date]);
                 if ($result_user) {
-                    notify('success', 'Account created, you may now login.', '/login');
+                    notify('success', 'Account created, you may now login.', DOMAIN.'/login');
                 }
             }
         }
     } else {
-        notify('danger', 'Please tick the checkbox.', '/create-account');
+        notify('danger', 'Please tick the checkbox.', DOMAIN.'/create-account');
     }
 }
 ?>
@@ -72,7 +72,7 @@ if (isset($_POST['register'])) {
                                         <label class="custom-control-label" for="ageCheck">I Agree that I am at least 13 year(s) old.</label>
                                     </div>
                                     <button type="submit" name="register" class="btn btn-primary">Finish Creation</button>
-                                    <a href="/login" class="btn btn-secondary float-right">Login</a>
+                                    <a href="./login" class="btn btn-secondary float-right">Login</a>
                                 </form>
                             </div>
                         </div>

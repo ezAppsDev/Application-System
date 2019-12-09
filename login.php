@@ -14,7 +14,7 @@ if (isset($_POST['login'])) {
     $stmt->execute([$display_name]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($user === false) {
-        notify('danger', 'We couldn\'t find that account.', '/login');
+        notify('danger', 'We couldn\'t find that account.', DOMAIN.'/login');
     } else {
         $validPassword = password_verify($password, $user['password']);
         if ($validPassword) {
@@ -22,7 +22,7 @@ if (isset($_POST['login'])) {
             $_SESSION['logged_in'] = time();
             header('Location: index');
         } else {
-            notify('danger', 'Wrong password.', '/login');
+            notify('danger', 'Wrong password.', DOMAIN.'/login');
         }
     }
 }
@@ -50,7 +50,7 @@ if (isset($_POST['login'])) {
                                         <input type="password" class="form-control" name="password" id="password" placeholder="Password">
                                     </div>
                                     <button type="submit" name="login" class="btn btn-primary">Login</button>
-                                    <a href="/create-account" class="btn btn-secondary float-right">Create Account</a>
+                                    <a href="./create-account" class="btn btn-secondary float-right">Create Account</a>
                                 </form>
                             </div>
                         </div>

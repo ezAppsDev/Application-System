@@ -12,16 +12,16 @@
         <!-- Styles -->
         <link href="//fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
         <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link href="/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/assets/plugins/font-awesome/css/all.min.css" rel="stylesheet">
+        <link href="<?php echo DOMAIN; ?>/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="<?php echo DOMAIN; ?>/assets/plugins/font-awesome/css/all.min.css" rel="stylesheet">
 
         <?php if($page['name'] === 'View Applications' || $page['name'] === 'User Management'): ?>
         <link href="//cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet">
         <?php endif; ?>
       
         <!-- Theme Styles -->
-        <link href="/assets/css/lime.min.css" rel="stylesheet">
-        <link href="/assets/css/custom.css" rel="stylesheet">
+        <link href="<?php echo DOMAIN; ?>/assets/css/lime.min.css" rel="stylesheet">
+        <link href="<?php echo DOMAIN; ?>/assets/css/custom.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

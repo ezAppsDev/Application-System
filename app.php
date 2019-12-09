@@ -3,10 +3,10 @@ session_name('ezApps');
 session_start();
 require 'tyler_base/global/connect.php';
 require 'tyler_base/global/config.php';
-$page['name'] = 'Home';
+$page['name'] = 'Viewing App';
 
 if (!loggedIn) {
-    header('Location: /login');
+    header('Location: '.DOMAIN.'/login');
     exit();
 }
 
@@ -19,7 +19,7 @@ if (isset($_GET['id'])) {
     $app = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($app === false) {
-        notify('danger', 'That application does not exist.', '/index');
+        notify('danger', 'That application does not exist.', DOMAIN.'/index');
     } else {
         $_SESSION['app_id'] = $id;
         $_SESSION['app_user'] = $app['user'];
@@ -55,7 +55,7 @@ if (isset($_GET['id'])) {
         if ($_SESSION['app_user'] <> $_SESSION['user_id']) {
             if (super_admin === 'false') {
                 if (app_management === 'false') {
-                    notify('danger', 'You do not have access to that part of the site.', '/index');
+                    notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
                 }
             }
         }
@@ -71,7 +71,7 @@ if (isset($_POST['addComment'])) {
     $stmt1         = $pdo->prepare($sql1);
     $result_ac   = $stmt1->execute([$_SESSION['app_id'], $_SESSION['user_id'], $datetime, $comment]);
     if ($result_ac) {
-        notify('success', 'Comment added.', '/app?id='.$_SESSION['app_id']);
+        notify('success', 'Comment added.', DOMAIN.'/app?id='.$_SESSION['app_id']);
     }
 }
 
@@ -82,6 +82,8 @@ if (isset($_POST['acceptApp'])) {
 
     $sql = "UPDATE applicants SET accepted_by = ? WHERE id = ?";
     $pdo->prepare($sql)->execute(['<hr><strong>Accepted by '.$user['display_name'].' (ID: '.$_SESSION['user_id'].')</strong>', $_SESSION['app_id']]); 
+
+    notify('success', 'Application Accepted', DOMAIN.'/app?id='.$_SESSION['app_id']);
 }
 
 //Decline app
@@ -93,6 +95,8 @@ if (isset($_POST['declineApp'])) {
 
     $sql = "UPDATE applicants SET denial_reason = ? WHERE id = ?";
     $pdo->prepare($sql)->execute([$denial_reason . '<hr><strong>Declined by '.$user['display_name'].' (ID: '.$_SESSION['user_id'].')</strong>', $_SESSION['app_id']]); 
+
+    notify('success', 'Application Denied', DOMAIN.'/app?id='.$_SESSION['app_id']);
 }
 
 //Check if a comment command is in the url
@@ -102,7 +106,7 @@ if (isset($_GET['c'])) {
     //Make sure they're staff
     if (super_admin === 'false') {
         if (app_management === 'false') {
-            notify('danger', 'You do not have access to that part of the site.', '/index');
+            notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
         }
     }
 
@@ -180,7 +184,7 @@ if (isset($_GET['c'])) {
                                     </div>
                                     <div class="mail-info">
                                         <div class="mail-author">
-                                            <img src="/assets/images/avatars/placeholder.png" alt="">
+                                            <img src="./assets/images/avatars/placeholder.png" alt="">
                                             <div class="mail-author-info">
                                                 <span class="mail-author-name"><?php echo $_SESSION['app_u_name']; ?></span>
                                                 <span class="mail-author-address"><?php echo $_SESSION['app_ug_name']; ?></span>
@@ -254,7 +258,7 @@ if (isset($_GET['c'])) {
                                     </div>
                                     <div class="mail-info">
                                         <div class="mail-author">
-                                            <img src="/assets/images/avatars/placeholder.png" alt="">
+                                            <img src="./assets/images/avatars/placeholder.png" alt="">
                                             <div class="mail-author-info">
                                                 <span class="mail-author-name"><?php echo $replyuDB['display_name']; ?></span>
                                                 <span class="mail-author-address"><?php echo $replyugDB['name']; ?></span>

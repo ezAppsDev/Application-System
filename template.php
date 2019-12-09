@@ -6,7 +6,7 @@ require 'tyler_base/global/config.php';
 $page['name'] = 'Home';
 
 if (!loggedIn) {
-    header('Location: /login');
+    header('Location: '.DOMAIN.'/login');
     exit();
 }
 ?>

@@ -6,14 +6,14 @@ require 'tyler_base/global/config.php';
 $page['name'] = 'Application Formats';
 
 if (!loggedIn) {
-    header('Location: /login');
+    header('Location: '.DOMAIN.'/login');
     exit();
 }
 
 //Check if they're staff and have permissions
 if (super_admin === 'false') {
     if (app_management === 'false') {
-        notify('danger', 'You do not have access to that part of the site.', '/index');
+        notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
     }
 }
 
@@ -31,7 +31,7 @@ if (isset($_POST['createAppFormat'])) {
     $checkAppName->execute([$app_name]);
     $can_result = $checkAppName->fetch(PDO::FETCH_ASSOC);
     if ($can_result['num'] > 0) {
-        notify('danger', 'Application name already in-use.', '/admin/formats');
+        notify('danger', 'Application name already in-use.', DOMAIN.'/admin/formats');
     } else {
         $sql1          = "INSERT INTO applications (name, format, created) VALUES (?,?,?)";
         $stmt1         = $pdo->prepare($sql1);
@@ -45,7 +45,7 @@ if (isset($_POST['createAppFormat'])) {
             // $sql3 = "ALTER TABLE `usergroups` ADD `app_manage_$appID` ENUM('true','false') NOT NULL DEFAULT 'false'";
             // $stmt3 = $pdo->prepare($sql3);
             // $stmt3->execute();
-            notify('success', 'Application format created! Please ensure you set what groups can manage these applications in usergroup management.', '/admin/formats');
+            notify('success', 'Application format created! Please ensure you add a description or requirements to this application by clicking edit.', DOMAIN.'/admin/formats');
         }
     }
 }
@@ -64,7 +64,7 @@ if (isset($_POST['updateApp'])) {
         $checkAppName->execute([$app_name]);
         $can_result = $checkAppName->fetch(PDO::FETCH_ASSOC);
         if ($can_result['num'] > 0) {
-            notify('danger', 'Application name already in-use.', '/admin/formats');
+            notify('danger', 'Application name already in-use.', DOMAIN.'/admin/formats');
         } else {
             $sql = "UPDATE applications SET name = ? WHERE id = ?";
             $pdo->prepare($sql)->execute([$app_name, $_SESSION['editing_app']]); 
@@ -86,7 +86,7 @@ if (isset($_POST['updateApp'])) {
         $pdo->prepare($sql)->execute([$app_format, $_SESSION['editing_app']]); 
     }
 
-    notify('success', 'Application format updated.', '/admin/formats');
+    notify('success', 'Application format updated.', DOMAIN.'/admin/formats');
 }
 
 //Delete app format
@@ -99,7 +99,7 @@ if (isset($_POST['deleteApp'])) {
     $sql = "DELETE FROM applications WHERE id = ?";
     $pdo->prepare($sql)->execute([$_SESSION['editing_app']]); 
 
-    notify('success', 'Application format deleted.', '/admin/formats');
+    notify('success', 'Application format deleted.', DOMAIN.'/admin/formats');
 }
 ?>
 <!DOCTYPE html>
@@ -193,7 +193,7 @@ if (isset($_POST['deleteApp'])) {
                                                         echo '<td><span class="badge badge-warning">ON-HOLD</span></td>';
                                                     }
                                                     echo '<td>NULL</td>';
-                                                    echo '<td><a class="btn btn-primary btn-sm openAppEditorModal" href="javascript:void(0);" data-href="../../../tyler_base/ajax/admin/applications/edit.php?appID='.$appDB['id'].'" role="button">Edit</a></td></tr>';
+                                                    echo '<td><a class="btn btn-primary btn-sm openAppEditorModal" href="javascript:void(0);" data-href="'.DOMAIN.'/tyler_base/ajax/admin/applications/edit.php?appID='.$appDB['id'].'" role="button">Edit</a></td></tr>';
                                                 }
                                             ?>
                                         </tbody>

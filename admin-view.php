@@ -6,14 +6,14 @@ require 'tyler_base/global/config.php';
 $page['name'] = 'View Applications';
 
 if (!loggedIn) {
-    header('Location: /login');
+    header('Location: '.DOMAIN.'/login');
     exit();
 }
 
 //Check if they're staff and have permissions
 if (super_admin === 'false') {
     if (app_management === 'false') {
-        notify('danger', 'You do not have access to that part of the site.', '/index');
+        notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
     }
 }
 
@@ -83,7 +83,7 @@ $dbCount['applicants'] = $pdo->query('select count(*) from applicants')->fetchCo
                                                         echo '<td><span class="badge badge-success">ACCEPTED</span></td>';
                                                     }
                                                     echo '<td>'.$appDB['created'].'</td>';
-                                                    echo '<td><a class="btn btn-primary btn-sm" href="/app?id='.$appDB['id'].'" role="button">View</a></td></tr>';
+                                                    echo '<td><a class="btn btn-primary btn-sm" href="./app?id='.$appDB['id'].'" role="button">View</a></td></tr>';
                                                 }
                                             ?>
                                         </tbody>

@@ -6,7 +6,7 @@ require 'tyler_base/global/config.php';
 $page['name'] = 'Apply';
 
 if (!loggedIn) {
-    header('Location: /login');
+    header('Location: '.DOMAIN.'/login');
     exit();
 }
 
@@ -22,7 +22,7 @@ if (isset($_POST['applyApp'])) {
     $stmt1         = $pdo->prepare($sql1);
     $result_ac   = $stmt1->execute([$_SESSION['user_id'], $_SESSION['applying_for'] , $datetime, $app_format]);
     if ($result_ac) {
-        notify('success', 'Your application has been submitted! Please allow us at least 48 hours for proper review. You may check on the status of yor application at any time on your home page.', '/apply');
+        notify('success', 'Your application has been submitted! Please allow us at least 48 hours for proper review. You may check on the status of yor application at any time on your home page.', DOMAIN.'/apply');
     }
 }
 ?>

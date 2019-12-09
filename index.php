@@ -6,7 +6,7 @@ require 'tyler_base/global/config.php';
 $page['name'] = 'Home';
 
 if (!loggedIn) {
-    header('Location: /login');
+    header('Location: '.DOMAIN.'/login');
     exit();
 }
 
@@ -90,7 +90,7 @@ $dbCount['my_apps'] = $pdo->query('select count(*) from applicants WHERE user="'
                                                         echo '<td><span class="badge badge-success">ACCEPTED</span></td>';
                                                     }
                                                     echo '<td>'.$appDB['created'].'</td>';
-                                                    echo '<td><a class="btn btn-primary btn-sm" href="/app?id='.$appDB['id'].'" role="button">View</a></td></tr>';
+                                                    echo '<td><a class="btn btn-primary btn-sm" href="./app?id='.$appDB['id'].'" role="button">View</a></td></tr>';
                                                 }
                                             ?>
                                         </tbody>

@@ -3,6 +3,9 @@ $version = '1.0.0';
 $assets_ver = '01';
 require_once 'functions.php';
 
+$domain = 'http://localhost/test';
+define("DOMAIN", $domain);
+
 // REGULAR USERS SHOULD NOT TOUCH THIS. DEVELOPER ONLY.
 $demo = false;
 

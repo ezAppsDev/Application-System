@@ -4,7 +4,7 @@ if(!isset($_SESSION['user_id'])) {
     $lp['loggedIn'] = false;
     define("loggedIn", $lp['loggedIn']);
     if (isset($page['name']) && $page['name'] <> 'Login') {
-        header('Location: /login');
+        header('Location: '.DOMAIN.'/login');
     }
 }  else {
     //If they ARE logged in
@@ -17,7 +17,7 @@ if(!isset($_SESSION['user_id'])) {
     $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($userRow === false) {
-        header('Location: /login');
+        header('Location: '.DOMAIN.'/login');
         exit();
     }
 

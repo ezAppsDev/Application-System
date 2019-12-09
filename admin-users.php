@@ -6,13 +6,13 @@ require 'tyler_base/global/config.php';
 $page['name'] = 'User Management';
 
 if (!loggedIn) {
-    header('Location: /login');
+    header('Location: '.DOMAIN.'/login');
     exit();
 }
 
 //Check if they're staff and have permissions
 if (super_admin === 'false') {
-    notify('danger', 'You do not have access to that part of the site.', '/index');
+    notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
 }
 ?>
 <!DOCTYPE html>
@@ -63,7 +63,7 @@ if (super_admin === 'false') {
                                                     echo '<td>'.$userDB['display_name'].'</td>';
                                                     echo '<td>'.$usersgroupDB['name'].'</td>';
                                                     echo '<td>'.$userDB['joined'].'</td>';
-                                                    echo '<td><a class="btn btn-primary btn-sm" href="/user?id='.$userDB['id'].'" role="button">Profile</a></td></tr>';
+                                                    echo '<td><a class="btn btn-primary btn-sm" href="./user?id='.$userDB['id'].'" role="button">Profile</a></td></tr>';
                                                 }
                                             ?>
                                         </tbody>

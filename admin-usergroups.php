@@ -6,13 +6,13 @@ require 'tyler_base/global/config.php';
 $page['name'] = 'Usergroup Management';
 
 if (!loggedIn) {
-    header('Location: /login');
+    header('Location: '.DOMAIN.'/login');
     exit();
 }
 
 //Check if they're staff and have permissions
 if (super_admin === 'false') {
-    notify('danger', 'You do not have access to that part of the site.', '/index');
+    notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
 }
 
 //Create new group 
@@ -25,13 +25,13 @@ if (isset($_POST['createNewGroup'])) {
     $checkGroupName->execute([$name]);
     $can_result = $checkGroupName->fetch(PDO::FETCH_ASSOC);
     if ($can_result['num'] > 0) {
-        notify('danger', 'Usergroup name already in-use.', '/admin/usergroups');
+        notify('danger', 'Usergroup name already in-use.', DOMAIN.'/admin/usergroups');
     } else {
         $sql1          = "INSERT INTO usergroups (name) VALUES (?)";
         $stmt1         = $pdo->prepare($sql1);
         $result_ac   = $stmt1->execute([$name]);
         if ($result_ac) {
-            notify('success', 'Usergroup created.', '/admin/usergroups');
+            notify('success', 'Usergroup created.', DOMAIN.'/admin/usergroups');
         }
     }
 }
@@ -47,7 +47,7 @@ if (isset($_POST['updateUsergroup'])) {
         $checkGroupName->execute([$name]);
         $can_result = $checkGroupName->fetch(PDO::FETCH_ASSOC);
         if ($can_result['num'] > 0) {
-            notify('danger', 'Usergroup name already in-use.', '/admin/usergroups');
+            notify('danger', 'Usergroup name already in-use.', DOMAIN.'/admin/usergroups');
         } else {
             $sql = "UPDATE usergroups SET name = ? WHERE id = ?";
             $pdo->prepare($sql)->execute([$group_name, $_SESSION['editing_group']]); 
@@ -78,7 +78,7 @@ if (isset($_POST['updateUsergroup'])) {
         $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);
     }
 
-    notify('success', 'Usergroup updated.', '/admin/usergroups');
+    notify('success', 'Usergroup updated.', DOMAIN.'/admin/usergroups');
 }
 ?>
 <!DOCTYPE html>
@@ -157,7 +157,7 @@ if (isset($_POST['updateUsergroup'])) {
                                                 foreach ($usergroupsDB as $usergroupDB) {
                                                     echo '<tr><td>'.$usergroupDB['id'].'</td>';
                                                     echo '<td>'.$usergroupDB['name'].'</td>';
-                                                    echo '<td><a class="btn btn-primary btn-sm openGroupEditorModal" href="javascript:void(0);" data-href="../../../tyler_base/ajax/admin/usergroups/edit.php?id='.$usergroupDB['id'].'" role="button">Edit</a></td></tr>';
+                                                    echo '<td><a class="btn btn-primary btn-sm openGroupEditorModal" href="javascript:void(0);" data-href="'.DOMAIN.'/tyler_base/ajax/admin/usergroups/edit.php?id='.$usergroupDB['id'].'" role="button">Edit</a></td></tr>';
                                                 }
                                             ?>
                                         </tbody>

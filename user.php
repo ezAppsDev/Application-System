@@ -6,7 +6,7 @@ require 'tyler_base/global/config.php';
 $page['name'] = 'User Profile';
 
 if (!loggedIn) {
-    header('Location: /login');
+    header('Location: '.DOMAIN.'/login');
     exit();
 }
 
@@ -19,7 +19,7 @@ if (isset($_GET['id'])) {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user === false) {
-        notify('danger', 'That user does not exist.', '/index');
+        notify('danger', 'That user does not exist.', DOMAIN.'/index');
     } else {
         $_SESSION['profile_user_id'] = $user['id'];
         $_SESSION['profile_display_name'] = $user['display_name'];
@@ -50,16 +50,16 @@ if (isset($_POST['updateUserSettings'])) {
     $newPass     = strip_tags($_POST['newPass']);
 
     if (strlen($newPass) < 8) {
-        notify('danger', 'Your password must be longer than 8 characters.', '/create-account');
+        notify('danger', 'Your password must be longer than 8 characters.', DOMAIN.'/user?id='.$_SESSION['profile_user_id']);
     } elseif (!preg_match("#[0-9]+#", $newPass)) {
-        notify('danger', 'Your password must include at least one number.', '/create-account');
+        notify('danger', 'Your password must include at least one number.', DOMAIN.'/user?id='.$_SESSION['profile_user_id']);
     } elseif (!preg_match("#[a-zA-Z]+#", $newPass)) {
-        notify('danger', 'Your password must include at least one letter.', '/create-account');
+        notify('danger', 'Your password must include at least one letter.', DOMAIN.'/user?id='.$_SESSION['profile_user_id']);
     } else {
         $passwordHash = password_hash($newPass, PASSWORD_BCRYPT, array("cost" => 12));
         $sql = "UPDATE users SET password = ? WHERE id = ?";
         $pdo->prepare($sql)->execute([$passwordHash, $_SESSION['user_id']]);
-        notify('success', 'Settings updated.', '/user?id='.$_SESSION['profile_user_id']);    
+        notify('success', 'Settings updated.', DOMAIN.'/user?id='.$_SESSION['profile_user_id']);    
     }
 }
 
@@ -70,7 +70,7 @@ if (isset($_POST['updateAdminUserSettings'])) {
 
     $sql = "UPDATE users SET usergroup = ? WHERE id = ?";
     $pdo->prepare($sql)->execute([$usergroup, $_SESSION['profile_user_id']]);
-    notify('success', 'User updated.', '/user?id='.$_SESSION['profile_user_id']); 
+    notify('success', 'User updated.', DOMAIN.'/user?id='.$_SESSION['profile_user_id']); 
 }
 ?>
 <!DOCTYPE html>
@@ -92,7 +92,7 @@ if (isset($_POST['updateAdminUserSettings'])) {
                         <div class="profile-cover"></div>
                         <div class="profile-header">
                             <div class="profile-img">
-                                <img src="/assets/images/avatars/placeholder.png">
+                                <img src="./assets/images/avatars/placeholder.png">
                             </div>
                             <div class="profile-name">
                                 <h3><?php echo $_SESSION['profile_display_name']; ?></h3>

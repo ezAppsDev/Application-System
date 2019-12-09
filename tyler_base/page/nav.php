@@ -5,14 +5,14 @@
                     Navigation
                 </li>
                 <li>
-                    <a href="/index"><i class="material-icons">home</i>Home</a>
+                    <a href="<?php echo DOMAIN; ?>/index"><i class="material-icons">home</i>Home</a>
                 </li>
                 <li>
-                    <a href="/apply"><i class="material-icons">assignment</i>Apply</a>
+                    <a href="<?php echo DOMAIN; ?>/apply"><i class="material-icons">assignment</i>Apply</a>
                 </li>
                 <hr>
                 <li>
-                    <a href="/thank-you"><i class="material-icons">star</i>Credit</a>
+                    <a href="<?php echo DOMAIN; ?>/thank-you"><i class="material-icons">star</i>Credit</a>
                 </li>
                 <?php if (super_admin === 'true'): ?>
                 <li class="sidebar-title">
@@ -24,10 +24,10 @@
                             class="material-icons has-sub-menu">keyboard_arrow_left</i></a>
                     <ul class="sub-menu">
                         <li>
-                            <a href="/admin/formats">Formats</a>
+                            <a href="<?php echo DOMAIN; ?>/admin/formats">Formats</a>
                         </li>
                         <li>
-                            <a href="/admin/view">View</a>
+                            <a href="<?php echo DOMAIN; ?>/admin/view">View</a>
                         </li>
                     </ul>
                 </li>
@@ -36,15 +36,15 @@
                             class="material-icons has-sub-menu">keyboard_arrow_left</i></a>
                     <ul class="sub-menu">
                         <li>
-                            <a href="/admin/users">Users</a>
+                            <a href="<?php echo DOMAIN; ?>/admin/users">Users</a>
                         </li>
                         <li>
-                            <a href="/admin/usergroups">Usergroups</a>
+                            <a href="<?php echo DOMAIN; ?>/admin/usergroups">Usergroups</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="/admin/settings"><i class="material-icons">settings</i>Settings</a>
+                    <a href="<?php echo DOMAIN; ?>/admin/settings"><i class="material-icons">settings</i>Settings</a>
                 </li>
                 <?php endif; ?>
                 <?php endif; ?>
