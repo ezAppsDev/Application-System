@@ -91,6 +91,11 @@ if (isset($_POST['updateApp'])) {
 
 //Delete app format
 if (isset($_POST['deleteApp'])) {
+    //First we need to delete all of the applications
+    $sql = "DELETE FROM applicants WHERE app = ?";
+    $pdo->prepare($sql)->execute([$_SESSION['editing_app']]);
+    
+    //Now delete the format
     $sql = "DELETE FROM applications WHERE id = ?";
     $pdo->prepare($sql)->execute([$_SESSION['editing_app']]); 
 
