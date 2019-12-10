@@ -202,6 +202,7 @@ if (isset($_GET['c'])) {
                                     <div class="mail-text">
                                         <p><?php echo nl2br($_SESSION['app_format']); ?></p>
                                     </div>
+                                    <?php if (super_admin === 'true' || app_management === 'true'): ?>
                                     <hr>
                                     <div class="mail-actions">
                                         <form method="post" class="form-inline">
@@ -217,6 +218,7 @@ if (isset($_GET['c'])) {
                                             <?php endif; ?>
                                         </form>
                                     </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -283,7 +285,7 @@ if (isset($_GET['c'])) {
                     </div>
                 </div>
                 <?php } ?>
-
+                <?php if (super_admin === 'true' || app_management === 'true'): ?>
                 <?php if($_SESSION['app_status'] === 'PENDING'): ?>
                     <!-- Decline App Modal -->
                     <div class="modal fade" id="declineApp" tabindex="-1" role="dialog" aria-labelledby="declineApp" aria-hidden="true">
@@ -314,7 +316,7 @@ if (isset($_GET['c'])) {
                         </div>
                     </div>
                 <?php endif; ?>
-
+                <?php endif; ?>
             </div>
         </div>
     </div>
