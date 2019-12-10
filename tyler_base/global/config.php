@@ -1,5 +1,5 @@
 <?php
-$version = '1.0.0';
+$version = '1.0.1';
 $assets_ver = '01';
 require_once 'functions.php';
 

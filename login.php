@@ -5,6 +5,10 @@ require 'tyler_base/global/connect.php';
 require 'tyler_base/global/config.php';
 $page['name'] = 'Login';
 
+if (isset($_GET['banned'])) {
+    notify('danger', 'You are banned from accessing ezApps for this community.', DOMAIN.'/login');
+}
+
 if (isset($_POST['login'])) {
     $display_name     = strip_tags($_POST['display_name']);
     $password  = strip_tags($_POST['password']);
@@ -20,6 +24,7 @@ if (isset($_POST['login'])) {
         if ($validPassword) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['logged_in'] = time();
+            logger('Logged In');
             header('Location: index');
         } else {
             notify('danger', 'Wrong password.', DOMAIN.'/login');

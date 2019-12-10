@@ -1,0 +1,3 @@
+If you are installing for the first time, you *ONLY* need to run "latest.sql"
+
+If you are updating from a previous install, you have to run the version's sql file.

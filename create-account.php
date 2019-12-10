@@ -21,21 +21,34 @@ if (isset($_POST['register'])) {
         } elseif (!preg_match("#[a-zA-Z]+#", $password)) {
             notify('danger', 'Your password must include at least one letter.', DOMAIN.'/create-account');
         } else {
-            $sql       = "SELECT COUNT(display_name) AS num FROM users WHERE display_name = ?";
-            $stmt      = $pdo->prepare($sql);
-            $stmt->execute([$display_name]);
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($row['num'] > 0) {
-                notify('danger', 'Display name already taken.', DOMAIN.'/create-account');
-            } else {
+            $dbCount['total_users'] = $pdo->query('select count(*) from users')->fetchColumn();
+
+            if ($dbCount['total_users'] === 0) {
                 $passwordHash = password_hash($password, PASSWORD_BCRYPT, array("cost" => 12));
-                $sql1          = "INSERT INTO users (display_name, password, joined) VALUES (?,?,?)";
-                $stmt1         = $pdo->prepare($sql1);
-                $result_user   = $stmt1->execute([$display_name, $passwordHash, $us_date]);
+                $sql          = "INSERT INTO users (display_name, password, joined, usergroup) VALUES (?,?,?,?)";
+                $stmt         = $pdo->prepare($sql);
+                $result_user   = $stmt->execute([$display_name, $passwordHash, $us_date, '2']);
                 if ($result_user) {
                     notify('success', 'Account created, you may now login.', DOMAIN.'/login');
                 }
+            } else {
+                $sql       = "SELECT COUNT(display_name) AS num FROM users WHERE display_name = ?";
+                $stmt      = $pdo->prepare($sql);
+                $stmt->execute([$display_name]);
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                if ($row['num'] > 0) {
+                    notify('danger', 'Display name already taken.', DOMAIN.'/create-account');
+                } else {
+                    $passwordHash = password_hash($password, PASSWORD_BCRYPT, array("cost" => 12));
+                    $sql          = "INSERT INTO users (display_name, password, joined) VALUES (?,?,?)";
+                    $stmt         = $pdo->prepare($sql);
+                    $result_user   = $stmt->execute([$display_name, $passwordHash, $us_date]);
+                    if ($result_user) {
+                        notify('success', 'Account created, you may now login.', DOMAIN.'/login');
+                    }
+                }
             }
+            
         }
     } else {
         notify('danger', 'Please tick the checkbox.', DOMAIN.'/create-account');

@@ -25,7 +25,8 @@ if (isset($_POST['updateSettings'])) {
 
     $sql = "UPDATE settings SET app_accept_message = ? WHERE id = ?";
     $pdo->prepare($sql)->execute([$app_accepted, '1']); 
-
+    
+    logger('Updated site settings');
     notify('success', 'Settings updated.', DOMAIN.'/admin/settings');
 }
 ?>

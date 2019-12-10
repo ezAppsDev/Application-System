@@ -71,6 +71,7 @@ if (isset($_POST['addComment'])) {
     $stmt1         = $pdo->prepare($sql1);
     $result_ac   = $stmt1->execute([$_SESSION['app_id'], $_SESSION['user_id'], $datetime, $comment]);
     if ($result_ac) {
+        logger('Commented on an application - Application ID: '.$_SESSION['app_id'].' <br />Comment: '.$comment.'');
         notify('success', 'Comment added.', DOMAIN.'/app?id='.$_SESSION['app_id']);
     }
 }
@@ -83,6 +84,7 @@ if (isset($_POST['acceptApp'])) {
     $sql = "UPDATE applicants SET accepted_by = ? WHERE id = ?";
     $pdo->prepare($sql)->execute(['<hr><strong>Accepted by '.$user['display_name'].' (ID: '.$_SESSION['user_id'].')</strong>', $_SESSION['app_id']]); 
 
+    logger('Accepted an application - Application ID: '.$_SESSION['app_id'].'');
     notify('success', 'Application Accepted', DOMAIN.'/app?id='.$_SESSION['app_id']);
 }
 
@@ -96,6 +98,7 @@ if (isset($_POST['declineApp'])) {
     $sql = "UPDATE applicants SET denial_reason = ? WHERE id = ?";
     $pdo->prepare($sql)->execute([$denial_reason . '<hr><strong>Declined by '.$user['display_name'].' (ID: '.$_SESSION['user_id'].')</strong>', $_SESSION['app_id']]); 
 
+    logger('Declined an application - Application ID: '.$_SESSION['app_id'].'');
     notify('success', 'Application Denied', DOMAIN.'/app?id='.$_SESSION['app_id']);
 }
 
@@ -113,7 +116,8 @@ if (isset($_GET['c'])) {
     //If the comment needs to be hidden
     if (isset($_GET['hide']) && strip_tags($_GET['hide']) === 'true') {
         $sql = "UPDATE applicant_comments SET hidden = ? WHERE id = ?";
-        $pdo->prepare($sql)->execute(['true', $c]); 
+        $pdo->prepare($sql)->execute(['true', $c]);
+        logger('Hid a comment - Application ID: '.$_SESSION['app_id'].' ... Comment ID: '.$c.'');
     }
 }
 ?>

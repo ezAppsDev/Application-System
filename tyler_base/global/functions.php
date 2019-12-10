@@ -11,20 +11,6 @@ function errorAlert($errno, $errstr, $errfile, $errline, $errcontext) {
 }
 set_error_handler("errorAlert");
 
-// Log Function
-function logAction($action, $user) {
-    global $pdo;
-    global $time;
-    global $us_date;
-
-    $sql_log = "INSERT INTO logs (action, username, timestamp) VALUES (:action, :username, :timestamp)";
-    $stmt_log = $pdo->prepare($sql_log);
-    $stmt_log->bindValue(':action', $action);
-    $stmt_log->bindValue(':username', $user);
-    $stmt_log->bindValue(':timestamp', $us_date . ' ' . $time);
-    $result_log = $stmt_log->execute();
-}
-
 function truncate_string($string, $maxlength, $extension) {
 
     // Set the replacement for the "string break" in the wordwrap function
@@ -109,4 +95,18 @@ function apps() {
             setcookie("apps", 'set', time()+60);
         }
     }
+}
+
+// Log Function
+function logger($action) {
+    global $pdo;
+    global $time;
+    global $datetime;
+    global $user_ip;
+
+    $a = nl2br($action);
+
+    $log    = "INSERT INTO logs (user, datetime, ip, action) VALUES (?,?,?,?)";
+    $log    = $pdo->prepare($log);
+    $log    = $log->execute([$_SESSION['user_id'], $datetime, $user_ip, $a]);
 }

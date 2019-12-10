@@ -28,5 +28,5 @@ define("app_management", $group['app_management']);
 if (access === 'false') {
     session_unset();
     session_destroy();
-    notify('danger', 'You do not have access to this system.', DOMAIN.'/login');
+    notify('danger', 'You do not have access to this system.', DOMAIN.'/login?banned');
 }

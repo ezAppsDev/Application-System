@@ -31,6 +31,7 @@ if (isset($_POST['createNewGroup'])) {
         $stmt1         = $pdo->prepare($sql1);
         $result_ac   = $stmt1->execute([$name]);
         if ($result_ac) {
+            logger('Created a new usergroup - '.$name.'');
             notify('success', 'Usergroup created.', DOMAIN.'/admin/usergroups');
         }
     }
@@ -78,6 +79,7 @@ if (isset($_POST['updateUsergroup'])) {
         $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);
     }
 
+    logger('Edited a usergroup - '.$group_name.' ('.$_SESSION['editing_group'].')');
     notify('success', 'Usergroup updated.', DOMAIN.'/admin/usergroups');
 }
 ?>

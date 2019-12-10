@@ -45,6 +45,7 @@ if (isset($_POST['createAppFormat'])) {
             // $sql3 = "ALTER TABLE `usergroups` ADD `app_manage_$appID` ENUM('true','false') NOT NULL DEFAULT 'false'";
             // $stmt3 = $pdo->prepare($sql3);
             // $stmt3->execute();
+            logger('Created an application format - "'.$app_name.'"');
             notify('success', 'Application format created! Please ensure you add a description or requirements to this application by clicking edit.', DOMAIN.'/admin/formats');
         }
     }
@@ -86,6 +87,7 @@ if (isset($_POST['updateApp'])) {
         $pdo->prepare($sql)->execute([$app_format, $_SESSION['editing_app']]); 
     }
 
+    logger('Edited an application format - "'.$app_name.'" ('.$_SESSION['editing_app'].')');
     notify('success', 'Application format updated.', DOMAIN.'/admin/formats');
 }
 
@@ -98,6 +100,8 @@ if (isset($_POST['deleteApp'])) {
     //Now delete the format
     $sql = "DELETE FROM applications WHERE id = ?";
     $pdo->prepare($sql)->execute([$_SESSION['editing_app']]); 
+
+    logger('Deleted an application format - "'.$_SESSION['editing_app_name'].'" ('.$_SESSION['editing_app'].')');
 
     notify('success', 'Application format deleted.', DOMAIN.'/admin/formats');
 }

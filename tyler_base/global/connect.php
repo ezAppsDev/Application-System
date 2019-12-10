@@ -18,4 +18,8 @@ try {
 catch(Exception $e) {
     die('<strong>Fatal Error while connecting to the database. Please refresh and try again, or check back later!</strong>');
 }
+
+if(!ini_get('allow_url_fopen')) {
+    die('allow_url_fopen is disabled. Please enable it in your host\'s php settings.');
+}
 ?>
