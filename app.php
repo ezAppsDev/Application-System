@@ -118,6 +118,12 @@ if (isset($_GET['c'])) {
         $sql = "UPDATE applicant_comments SET hidden = ? WHERE id = ?";
         $pdo->prepare($sql)->execute(['true', $c]);
         logger('Hid a comment - Application ID: '.$_SESSION['app_id'].' ... Comment ID: '.$c.'');
+        notify('success', 'Comment Hidden', DOMAIN.'/app?id='.$_SESSION['app_id']);
+    } elseif (isset($_GET['hide']) && strip_tags($_GET['hide']) === 'false') {
+        $sql = "UPDATE applicant_comments SET hidden = ? WHERE id = ?";
+        $pdo->prepare($sql)->execute(['false', $c]);
+        logger('Unhid a comment - Application ID: '.$_SESSION['app_id'].' ... Comment ID: '.$c.'');
+        notify('success', 'Comment Unhidden', DOMAIN.'/app?id='.$_SESSION['app_id']);
     }
 }
 ?>
@@ -136,14 +142,14 @@ if (isset($_GET['c'])) {
             <div class="container">
                 <div id="ezaMsg"><?php if (isset($message)) { echo $message; } ?></div>
                 <?php if($_SESSION['app_status'] === 'ACCEPTED'): ?>
-                    <div class="alert alert-success m-b-lg" role="alert">
-                        <?php echo $config['app_accept_message']; 
+                <div class="alert alert-success m-b-lg" role="alert">
+                    <?php echo $config['app_accept_message']; 
                         echo $_SESSION['app_accepted_by']; ?>
-                    </div>
+                </div>
                 <?php elseif ($_SESSION['app_status'] === 'DENIED'): ?>
-                    <div class="alert alert-danger m-b-lg" role="alert">
-                        <?php echo nl2br($_SESSION['app_denial_reason']); ?>
-                    </div>
+                <div class="alert alert-danger m-b-lg" role="alert">
+                    <?php echo nl2br($_SESSION['app_denial_reason']); ?>
+                </div>
                 <?php endif; ?>
                 <div class="row">
                     <div class="col-lg-12">
@@ -152,18 +158,22 @@ if (isset($_GET['c'])) {
                                 <div class="mail-container">
                                     <div class="mail-header">
                                         <div class="mail-title">
-                                            <?php echo $_SESSION['app_i_name']; ?> Application - ID: <?php echo $_SESSION['app_id']; ?>
+                                            <?php echo $_SESSION['app_i_name']; ?> Application - ID:
+                                            <?php echo $_SESSION['app_id']; ?>
                                         </div>
                                         <div class="mail-actions">
-                                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#replyModal">Comment</button>
+                                            <button type="button" class="btn btn-secondary" data-toggle="modal"
+                                                data-target="#replyModal">Comment</button>
                                         </div>
                                         <!-- Reply Modal -->
-                                        <div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="replyModal" aria-hidden="true">
+                                        <div class="modal fade" id="replyModal" tabindex="-1" role="dialog"
+                                            aria-labelledby="replyModal" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="replyModal">Adding Comment</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
                                                             <i class="material-icons">close</i>
                                                         </button>
                                                     </div>
@@ -172,14 +182,19 @@ if (isset($_GET['c'])) {
                                                             <div class="row">
                                                                 <div class="col-md-12">
                                                                     <div class="form-group">
-                                                                        <textarea class="form-control" rows="4" name="comment" id="comment" placeholder="Comment..." required></textarea>
+                                                                        <textarea class="form-control" rows="4"
+                                                                            name="comment" id="comment"
+                                                                            placeholder="Comment..."
+                                                                            required></textarea>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                            <button type="submit" name="addComment" class="btn btn-primary">Add</button>
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Cancel</button>
+                                                            <button type="submit" name="addComment"
+                                                                class="btn btn-primary">Add</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -190,8 +205,10 @@ if (isset($_GET['c'])) {
                                         <div class="mail-author">
                                             <img src="./assets/images/avatars/placeholder.png" alt="">
                                             <div class="mail-author-info">
-                                                <span class="mail-author-name"><?php echo $_SESSION['app_u_name']; ?></span>
-                                                <span class="mail-author-address"><?php echo $_SESSION['app_ug_name']; ?></span>
+                                                <span
+                                                    class="mail-author-name"><?php echo $_SESSION['app_u_name']; ?></span>
+                                                <span
+                                                    class="mail-author-address"><?php echo $_SESSION['app_ug_name']; ?></span>
                                             </div>
                                         </div>
                                         <div class="mail-other-info">
@@ -207,14 +224,16 @@ if (isset($_GET['c'])) {
                                     <div class="mail-actions">
                                         <form method="post" class="form-inline">
                                             <?php if($_SESSION['app_status'] === 'PENDING'): ?>
-                                                <button type="submit" name="acceptApp" class="btn btn-success mr-2">Accept</button>
+                                            <button type="submit" name="acceptApp"
+                                                class="btn btn-success mr-2">Accept</button>
                                             <?php else: ?>
-                                                <button class="btn btn-success mr-2" disabled>Accept</button>
+                                            <button class="btn btn-success mr-2" disabled>Accept</button>
                                             <?php endif; ?>
                                             <?php if($_SESSION['app_status'] === 'PENDING') :?>
-                                                <button type="button" data-toggle="modal" data-target="#declineApp" class="btn btn-danger">Decline</button>
+                                            <button type="button" data-toggle="modal" data-target="#declineApp"
+                                                class="btn btn-danger">Decline</button>
                                             <?php else: ?>
-                                                <button class="btn btn-danger" disabled>Decline</button>
+                                            <button class="btn btn-danger" disabled>Decline</button>
                                             <?php endif; ?>
                                         </form>
                                     </div>
@@ -242,32 +261,81 @@ if (isset($_GET['c'])) {
                     $getReplyUserGroupInfo->execute([$replyuDB['usergroup']]);
                     $replyugDB = $getReplyUserGroupInfo->fetch(PDO::FETCH_ASSOC);
                     ?>
+
                 <div class="row">
+                    <?php if($commentDB['hidden'] === 'true' && super_admin === 'true'): ?>
+                    <div class="col-lg-12">
+                        <div class="accordion" id="hiddenComment<?php echo $commentDB['id']; ?>">
+                            <div class="card">
+                                <div class="card-header bg-danger text-white" id="headingOne" data-toggle="collapse"
+                                    data-target="#collapse<?php echo $commentDB['id']; ?>" aria-expanded="true" aria-controls="collapse<?php echo $commentDB['id']; ?>">
+                                    Hidden Comment (Click for more)
+                                </div>
+                                <div id="collapse<?php echo $commentDB['id']; ?>" class="collapse" aria-labelledby="headingOne"
+                                    data-parent="#hiddenComment<?php echo $commentDB['id']; ?>">
+                                    <div class="card-body border border-danger">
+                                        <div class="mail-container">
+                                            <div class="mail-header">
+                                                <div class="mail-title">
+                                                    Comment
+                                                </div>
+                                                <?php if(super_admin === 'true'): ?>
+                                                <div class="mail-actions">
+                                                    <a class="btn btn-success btn-sm"
+                                                        href="<?php echo $_SERVER['REQUEST_URI']; ?>&c=<?php echo $commentDB['id']; ?>&hide=false"
+                                                        role="button">Unhide</a>
+                                                </div>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div class="mail-info">
+                                                <div class="mail-author">
+                                                    <img src="./assets/images/avatars/placeholder.png" alt="">
+                                                    <div class="mail-author-info">
+                                                        <span
+                                                            class="mail-author-name"><?php echo $replyuDB['display_name']; ?></span>
+                                                        <span
+                                                            class="mail-author-address"><?php echo $replyugDB['name']; ?></span>
+                                                    </div>
+                                                </div>
+                                                <div class="mail-other-info">
+                                                    <span><?php echo $commentDB['created']; ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="divider"></div>
+                                            <div class="mail-text">
+                                                <p><?php echo nl2br($commentDB['msg']); ?></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php elseif ($commentDB['hidden'] === 'false'): ?>
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                            <?php if($commentDB['hidden'] === 'true'): ?>
-                                <div class="alert alert-info m-b-lg" role="alert">
-                                    <i>This reply has been hidden by an admin.</i>
-                                </div>
-                            <?php else: ?>
                                 <div class="mail-container">
                                     <div class="mail-header">
                                         <div class="mail-title">
                                             Comment
                                         </div>
                                         <?php if(super_admin === 'true'): ?>
-                                            <div class="mail-actions">
-                                                <a class="btn btn-danger btn-sm" href="<?php echo $_SERVER['REQUEST_URI']; ?>&c=<?php echo $commentDB['id']; ?>&hide=true" role="button">Hide</a>
-                                            </div>
+                                        <div class="mail-actions">
+                                            <a class="btn btn-danger btn-sm"
+                                                href="<?php echo $_SERVER['REQUEST_URI']; ?>&c=<?php echo $commentDB['id']; ?>&hide=true"
+                                                role="button">Hide</a>
+                                        </div>
                                         <?php endif; ?>
                                     </div>
                                     <div class="mail-info">
                                         <div class="mail-author">
                                             <img src="./assets/images/avatars/placeholder.png" alt="">
                                             <div class="mail-author-info">
-                                                <span class="mail-author-name"><?php echo $replyuDB['display_name']; ?></span>
-                                                <span class="mail-author-address"><?php echo $replyugDB['name']; ?></span>
+                                                <span
+                                                    class="mail-author-name"><?php echo $replyuDB['display_name']; ?></span>
+                                                <span
+                                                    class="mail-author-address"><?php echo $replyugDB['name']; ?></span>
                                             </div>
                                         </div>
                                         <div class="mail-other-info">
@@ -279,42 +347,44 @@ if (isset($_GET['c'])) {
                                         <p><?php echo nl2br($commentDB['msg']); ?></p>
                                     </div>
                                 </div>
-                            <?php endif; ?>
                             </div>
                         </div>
                     </div>
+                    <?php endif; ?>
                 </div>
                 <?php } ?>
                 <?php if (super_admin === 'true' || app_management === 'true'): ?>
                 <?php if($_SESSION['app_status'] === 'PENDING'): ?>
-                    <!-- Decline App Modal -->
-                    <div class="modal fade" id="declineApp" tabindex="-1" role="dialog" aria-labelledby="declineApp" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="declineApp">Reason for denial</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <i class="material-icons">close</i>
-                                    </button>
-                                </div>
-                                <form method="POST">
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <textarea class="form-control" rows="4" name="denial_reason" id="denial_reason" placeholder="Denial Reason" required></textarea>
-                                                </div>
+                <!-- Decline App Modal -->
+                <div class="modal fade" id="declineApp" tabindex="-1" role="dialog" aria-labelledby="declineApp"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="declineApp">Reason for denial</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <i class="material-icons">close</i>
+                                </button>
+                            </div>
+                            <form method="POST">
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <textarea class="form-control" rows="4" name="denial_reason"
+                                                    id="denial_reason" placeholder="Denial Reason" required></textarea>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                        <button type="submit" name="declineApp" class="btn btn-danger">Decline</button>
-                                    </div>
-                                </form>
-                            </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" name="declineApp" class="btn btn-danger">Decline</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
+                </div>
                 <?php endif; ?>
                 <?php endif; ?>
             </div>

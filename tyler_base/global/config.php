@@ -1,10 +1,10 @@
 <?php
-$version = '1.0.2';
+$version = '1.0.3';
 $assets_ver = '01';
 require_once 'functions.php';
 
 //EDIT THIS TO YOUR DOMAIN. DO NOT INCLUDE A TRAILING SLASH
-$domain = 'http://localhost/';
+$domain = 'http://localhost';
 define("DOMAIN", $domain);
 
 // REGULAR USERS SHOULD NOT TOUCH THIS. DEVELOPER ONLY.

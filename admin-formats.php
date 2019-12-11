@@ -187,6 +187,7 @@ if (isset($_POST['deleteApp'])) {
                                                 $appsDB = $getApplicationsDB->fetchAll(PDO::FETCH_ASSOC);
                                                 
                                                 foreach ($appsDB as $appDB) {
+                                                    $dbCount['total_applied'] = $pdo->query('select count(*) from applicants WHERE app='.$appDB['id'])->fetchColumn();
                                                     echo '<tr><td>'.$appDB['id'].'</td>';
                                                     echo '<td>'.$appDB['name'].'</td>';
                                                     if ($appDB['status'] === 'OPEN') {
@@ -196,7 +197,7 @@ if (isset($_POST['deleteApp'])) {
                                                     } elseif ($appDB['status'] === 'ON-HOLD') {
                                                         echo '<td><span class="badge badge-warning">ON-HOLD</span></td>';
                                                     }
-                                                    echo '<td>NULL</td>';
+                                                    echo '<td>'.$dbCount['total_applied'].'</td>';
                                                     echo '<td><a class="btn btn-primary btn-sm openAppEditorModal" href="javascript:void(0);" data-href="'.DOMAIN.'/tyler_base/ajax/admin/applications/edit.php?appID='.$appDB['id'].'" role="button">Edit</a></td></tr>';
                                                 }
                                             ?>
