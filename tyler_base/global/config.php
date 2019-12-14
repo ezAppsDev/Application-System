@@ -3,6 +3,8 @@ $version = '1.1.0';
 $assets_ver = '01';
 require_once 'functions.php';
 
+$locale = 'en'; // en -> English, es -> Spanish, fr -> French
+
 //EDIT THIS TO YOUR DOMAIN. DO NOT INCLUDE A TRAILING SLASH
 $domain = 'http://localhost';
 define("DOMAIN", $domain);
