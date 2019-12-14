@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 10, 2019 at 01:17 AM
+-- Generation Time: Dec 13, 2019 at 06:57 PM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -93,15 +93,19 @@ CREATE TABLE `settings` (
   `id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL DEFAULT 'Application System',
   `discord_webhook` text DEFAULT NULL,
-  `app_accept_message` varchar(355) NOT NULL DEFAULT '''Your application has been accepted!'''
+  `wh_app_declined` enum('true','false') NOT NULL DEFAULT 'true',
+  `wh_app_accepted` enum('true','false') NOT NULL DEFAULT 'true',
+  `wh_app_created` enum('true','false') NOT NULL DEFAULT 'true',
+  `app_accept_message` varchar(355) NOT NULL DEFAULT '''Your application has been accepted!''',
+  `theme` varchar(64) NOT NULL DEFAULT 'default'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `name`, `discord_webhook`, `app_accept_message`) VALUES
-(1, 'ezApps', NULL, 'Your application has been accepted!');
+INSERT INTO `settings` (`id`, `name`, `discord_webhook`, `wh_app_declined`, `wh_app_accepted`, `wh_app_created`, `app_accept_message`, `theme`) VALUES
+(1, 'ezApps', NULL, 'true', 'true', 'true', 'Your application has been accepted!', 'dark');
 
 -- --------------------------------------------------------
 
@@ -114,17 +118,22 @@ CREATE TABLE `usergroups` (
   `name` varchar(64) NOT NULL,
   `access` enum('true','false') NOT NULL DEFAULT 'true',
   `super_admin` enum('true','false') NOT NULL DEFAULT 'false',
-  `app_management` enum('true','false') NOT NULL DEFAULT 'false'
+  `view_apps` enum('true','false') NOT NULL DEFAULT 'false',
+  `review_apps` enum('true','false') NOT NULL DEFAULT 'false',
+  `view_users` enum('true','false') NOT NULL DEFAULT 'false',
+  `view_usergroups` enum('true','false') NOT NULL DEFAULT 'false',
+  `edit_users` enum('true','false') NOT NULL DEFAULT 'false',
+  `edit_usergroups` enum('true','false') NOT NULL DEFAULT 'false'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `usergroups`
 --
 
-INSERT INTO `usergroups` (`id`, `name`, `access`, `super_admin`, `app_management`) VALUES
-(0, 'Banned', 'false', 'false', 'false'),
-(1, 'User', 'true', 'false', 'false'),
-(2, 'Admin', 'true', 'true', 'true');
+INSERT INTO `usergroups` (`id`, `name`, `access`, `super_admin`, `view_apps`, `review_apps`, `view_users`, `view_usergroups`, `edit_users`, `edit_usergroups`) VALUES
+(0, 'Banned', 'false', 'false', 'false', 'false', 'false', 'false', 'false', 'false'),
+(1, 'User', 'true', 'false', 'false', 'false', 'false', 'false', 'false', 'false'),
+(2, 'Admin', 'true', 'true', 'false', 'false', 'false', 'true', 'false', 'false');
 
 -- --------------------------------------------------------
 
@@ -137,7 +146,9 @@ CREATE TABLE `users` (
   `display_name` varchar(64) NOT NULL,
   `password` text NOT NULL,
   `joined` varchar(64) NOT NULL,
-  `usergroup` int(11) NOT NULL DEFAULT 1
+  `usergroup` int(11) NOT NULL DEFAULT 1,
+  `discord_id` text DEFAULT NULL,
+  `avatar` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --

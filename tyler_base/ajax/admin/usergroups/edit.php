@@ -15,9 +15,6 @@ $_SESSION['editing_group'] = $id;
 $_SESSION['editing_group_name'] = $ugInfo['name'];
 $_SESSION['editing_group_access'] = $ugInfo['access'];
 $_SESSION['editing_group_super_admin'] = $ugInfo['super_admin'];
-
-$_SESSION['editing_group_app_management'] = $ugInfo['app_management'];
-
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +26,15 @@ $_SESSION['editing_group_app_management'] = $ugInfo['app_management'];
 </head>
 
 <body>
+    <?php if(super_admin === 'false' && edit_usergroups === 'false'): ?>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger m-b-lg" role="alert">
+                No Permission.
+            </div>
+        </div>
+    </div>
+    <?php else: ?>
     <form method="post">
         <div class="row">
             <div class="col-md-12">
@@ -44,14 +50,30 @@ $_SESSION['editing_group_app_management'] = $ugInfo['app_management'];
                     <input type="checkbox" name="perm_super_admin" id="perm_super_admin" <?php if ($ugInfo['super_admin'] === 'true') {echo 'checked';} ?>>
                     <label class="label" for="perm_super_admin">Super Admin</label>
 
-                    <input type="checkbox" name="perm_app_management" id="perm_app_management" <?php if ($ugInfo['app_management'] === 'true') {echo 'checked';} ?>>
-                    <label class="label" for="perm_app_management">App Management</label>
+                    <input type="checkbox" name="perm_view_apps" id="perm_view_apps" <?php if ($ugInfo['view_apps'] === 'true') {echo 'checked';} ?>>
+                    <label class="label" for="perm_view_apps">View Applications</label>
+
+                    <input type="checkbox" name="perm_review_apps" id="perm_review_apps" <?php if ($ugInfo['review_apps'] === 'true') {echo 'checked';} ?>>
+                    <label class="label" for="perm_review_apps">Review Applications</label>
+
+                    <input type="checkbox" name="perm_view_users" id="perm_view_users" <?php if ($ugInfo['view_users'] === 'true') {echo 'checked';} ?>>
+                    <label class="label" for="perm_view_users">View Users</label>
+
+                    <input type="checkbox" name="perm_view_usergroups" id="perm_view_usergroups" <?php if ($ugInfo['view_usergroups'] === 'true') {echo 'checked';} ?>>
+                    <label class="label" for="perm_view_usergroups">View Usergroups</label>
+
+                    <input type="checkbox" name="perm_edit_users" id="perm_edit_users" <?php if ($ugInfo['edit_users'] === 'true') {echo 'checked';} ?>>
+                    <label class="label" for="perm_edit_users">Edit Users</label>
+
+                    <input type="checkbox" name="perm_edit_usergroups" id="perm_edit_usergroups" <?php if ($ugInfo['edit_usergroups'] === 'true') {echo 'checked';} ?>>
+                    <label class="label" for="perm_edit_usergroups">Edit Usergroups</label>
                 </div>
             </div>
         </div>
         <hr>
         <button type="submit" name="updateUsergroup" class="btn btn-primary btn-md float-right mb-3">Update</button>
     </form>
+    <?php endif; ?>
 </body>
 
 </html>

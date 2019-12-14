@@ -5,7 +5,7 @@
                     <span class="material-design-hamburger__layer"></span>
                 </a>
             </section>
-            <a class="navbar-brand" href="#"><?php echo $config['name']; ?></a>
+            <a class="navbar-brand" href="<?php echo DOMAIN; ?>"><?php echo $config['name']; ?></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="material-icons">keyboard_arrow_down</i>

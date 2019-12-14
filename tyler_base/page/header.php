@@ -20,8 +20,8 @@
         <?php endif; ?>
       
         <!-- Theme Styles -->
-        <link href="<?php echo DOMAIN; ?>/assets/css/lime.min.css" rel="stylesheet">
-        <link href="<?php echo DOMAIN; ?>/assets/css/custom.css" rel="stylesheet">
+        <link href="<?php echo DOMAIN; ?>/assets/themes/<?php echo $config['theme']; ?>/css/lime.min.css" rel="stylesheet">
+        <link href="<?php echo DOMAIN; ?>/assets/themes/<?php echo $config['theme']; ?>/css/custom.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

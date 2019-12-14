@@ -25,6 +25,8 @@ if (isset($_GET['id'])) {
         $_SESSION['profile_display_name'] = $user['display_name'];
         $_SESSION['profile_joined'] = $user['joined'];
         $_SESSION['profile_usergroup'] = $user['usergroup'];
+        $_SESSION['profile_discord_id'] = $user['discord_id'];
+        $_SESSION['profile_avatar'] = $user['avatar'];
 
         $_SESSION['profile_owner'] = 'false';
 
@@ -92,7 +94,11 @@ if (isset($_POST['updateAdminUserSettings'])) {
                         <div class="profile-cover"></div>
                         <div class="profile-header">
                             <div class="profile-img">
-                                <img src="./assets/images/avatars/placeholder.png">
+                                <?php if($_SESSION['profile_avatar'] === NULL): ?>
+                                    <img src="<?php echo DOMAIN; ?>/assets/themes/<?php echo $config['theme']; ?>/images/avatars/placeholder.png">
+                                <?php else: ?>
+                                    <img src="<?php echo $_SESSION['profile_avatar']; ?>">
+                                <?php endif; ?>
                             </div>
                             <div class="profile-name">
                                 <h3><?php echo $_SESSION['profile_display_name']; ?></h3>
@@ -110,9 +116,11 @@ if (isset($_POST['updateAdminUserSettings'])) {
                                             <?php echo $_SESSION['profile_joined']; ?></span></li>
                                     <li><i class="material-icons">group_add</i><span>Usergroup:
                                             <?php echo $_SESSION['profile_usergroup_name']; ?></span></li>
+                                    <li><i class="material-icons">account_box</i><span>Discord ID:
+                                            <?php echo $_SESSION['profile_discord_id']; ?></span></li>
                                     <?php if($_SESSION['profile_owner'] === 'true' || super_admin === 'true'): ?>
                                     <hr>
-                                    <?php if(super_admin === 'true'): ?>
+                                    <?php if(super_admin === 'true' && edit_users === 'false'): ?>
                                     <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
                                         data-target="#adminUserSettings">Admin</button>
                                     <!-- Admin User Settings Modal -->
@@ -207,7 +215,7 @@ if (isset($_POST['updateAdminUserSettings'])) {
                                                                         for="newPass">New Password</label>
                                                                     <input type="password" class="form-control"
                                                                         name="newPass" id="newPass"
-                                                                        placeholder="New Password..." required>
+                                                                        placeholder="New Password..." autocomplete="new-password" required>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -249,7 +257,11 @@ if (isset($_POST['updateAdminUserSettings'])) {
                             <div class="card-body">
                                 <div class="post">
                                     <div class="post-header">
-                                        <img src="/assets/images/avatars/placeholder.png">
+                                        <?php if($_SESSION['profile_avatar'] === NULL): ?>
+                                            <img src="<?php echo DOMAIN; ?>/assets/themes/<?php echo $config['theme']; ?>/images/avatars/placeholder.png">
+                                        <?php else: ?>
+                                            <img src="<?php echo $_SESSION['profile_avatar']; ?>">
+                                        <?php endif; ?>
                                         <div class="post-info">
                                             <span
                                                 class="post-author"><?php echo $_SESSION['profile_display_name']; ?></span><br>
@@ -269,8 +281,7 @@ if (isset($_POST['updateAdminUserSettings'])) {
                 </div>
             </div>
         </div>
-    </div>
-    <?php require 'tyler_base/page/copyright.php'; ?>
+        <?php require 'tyler_base/page/copyright.php'; ?>
     </div>
 
     <?php require 'tyler_base/page/footer.php'; ?>

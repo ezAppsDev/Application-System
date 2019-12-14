@@ -27,6 +27,15 @@ $_SESSION['editing_app_desc'] = $appInfo['description'];
 </head>
 
 <body>
+    <?php if(super_admin === 'false'): ?>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger m-b-lg" role="alert">
+                No Permission.
+            </div>
+        </div>
+    </div>
+    <?php else: ?>
     <form method="post">
         <div class="row">
             <div class="col-md-12">
@@ -57,6 +66,7 @@ $_SESSION['editing_app_desc'] = $appInfo['description'];
         <button type="submit" name="deleteApp" onclick="if(confirm('Are you sure you would like to delete this application format? All applications submitted will be lost, and can not be recovered.')){}else{return false;};" class="btn btn-danger btn-md float-left mb-3">Delete</button>
         <button type="submit" name="updateApp" class="btn btn-primary btn-md float-right mb-3">Update</button>
     </form>
+    <?php endif; ?>
 </body>
 
 </html>

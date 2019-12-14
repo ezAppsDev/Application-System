@@ -18,6 +18,14 @@ if (isset($_POST['applyApp'])) {
     //Sanitize
     $app_format  = strip_tags(nl2br($_POST['app_format']));
 
+    if ($webhook['app_created'] === 'true') {
+        if ($user['discord_id'] <> NULL) {
+            discordAlert($user['display_name'] . ' (<@' . $user['discord_id'] . '>) created an application on ' . $datetime);
+        } else {
+            discordAlert($user['display_name'] . ' created an application on ' . $datetime);
+        }        
+    }
+
     $sql1          = "INSERT INTO applicants (user, app, created, format) VALUES (?,?,?,?)";
     $stmt1         = $pdo->prepare($sql1);
     $result_ac   = $stmt1->execute([$_SESSION['user_id'], $_SESSION['applying_for'] , $datetime, $app_format]);

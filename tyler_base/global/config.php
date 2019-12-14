@@ -1,5 +1,5 @@
 <?php
-$version = '1.0.3';
+$version = '1.1.0';
 $assets_ver = '01';
 require_once 'functions.php';
 
@@ -17,7 +17,13 @@ $stmt_gconfig->execute(['1']);
 $configRow = $stmt_gconfig->fetch(PDO::FETCH_ASSOC);
 
 $config['name'] = $configRow['name'];
+$config['theme'] = $configRow['theme'];
+$wh = $configRow['discord_webhook'];
 $config['app_accept_message'] = $configRow['app_accept_message'];
+$webhook['app_created'] = $configRow['wh_app_created'];
+$webhook['app_accepted'] = $configRow['wh_app_accepted'];
+$webhook['app_declined'] = $configRow['wh_app_declined'];
+
 apps();
 $user_ip = getUserIP();
 $date = date('Y-m-d');

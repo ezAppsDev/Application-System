@@ -28,6 +28,11 @@ $dbCount['my_apps'] = $pdo->query('select count(*) from applicants WHERE user="'
         <div class="lime-body">
             <div class="container">
             <div id="ezaMsg"><?php if (isset($message)) { echo $message; } ?></div>
+                <?php if($wh <> NULL && $user['discord_id'] === NULL): ?>
+                <div class="alert alert-info m-b-lg" role="alert">
+                    Hey <?php echo $user['display_name']; ?>! This community has discord webhooks enabled but you don't seem to have a Discord ID linked :( Click <a href="<?php echo DOMAIN; ?>/3rdparty/discord?action=auth">here</a> to link your Discord ID and get the most out of ezApps including notifications via Discord of your application status!
+                </div>
+                <?php endif; ?>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card stat-card">

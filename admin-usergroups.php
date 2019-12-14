@@ -10,8 +10,7 @@ if (!loggedIn) {
     exit();
 }
 
-//Check if they're staff and have permissions
-if (super_admin === 'false') {
+if (super_admin === 'false' && view_usergroups === 'false') {
     notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
 }
 
@@ -71,11 +70,51 @@ if (isset($_POST['updateUsergroup'])) {
         $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);
     }
 
-    if (isset($_POST['perm_app_management'])) { //Is checked
-        $sql = "UPDATE usergroups SET app_management = ? WHERE id = ?";
+    if (isset($_POST['perm_view_apps'])) { //Is checked
+        $sql = "UPDATE usergroups SET view_apps = ? WHERE id = ?";
         $pdo->prepare($sql)->execute(['true', $_SESSION['editing_group']]);
     } else { //Is not checked
-        $sql = "UPDATE usergroups SET app_management = ? WHERE id = ?";
+        $sql = "UPDATE usergroups SET view_apps = ? WHERE id = ?";
+        $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);
+    }
+
+    if (isset($_POST['perm_review_apps'])) { //Is checked
+        $sql = "UPDATE usergroups SET review_apps = ? WHERE id = ?";
+        $pdo->prepare($sql)->execute(['true', $_SESSION['editing_group']]);
+    } else { //Is not checked
+        $sql = "UPDATE usergroups SET review_apps = ? WHERE id = ?";
+        $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);
+    }
+
+    if (isset($_POST['perm_view_users'])) { //Is checked
+        $sql = "UPDATE usergroups SET view_users = ? WHERE id = ?";
+        $pdo->prepare($sql)->execute(['true', $_SESSION['editing_group']]);
+    } else { //Is not checked
+        $sql = "UPDATE usergroups SET view_users = ? WHERE id = ?";
+        $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);
+    }
+
+    if (isset($_POST['perm_view_usergroups'])) { //Is checked
+        $sql = "UPDATE usergroups SET view_usergroups = ? WHERE id = ?";
+        $pdo->prepare($sql)->execute(['true', $_SESSION['editing_group']]);
+    } else { //Is not checked
+        $sql = "UPDATE usergroups SET view_usergroups = ? WHERE id = ?";
+        $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);
+    }
+
+    if (isset($_POST['perm_edit_users'])) { //Is checked
+        $sql = "UPDATE usergroups SET edit_users = ? WHERE id = ?";
+        $pdo->prepare($sql)->execute(['true', $_SESSION['editing_group']]);
+    } else { //Is not checked
+        $sql = "UPDATE usergroups SET edit_users = ? WHERE id = ?";
+        $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);
+    }
+
+    if (isset($_POST['perm_edit_usergroups'])) { //Is checked
+        $sql = "UPDATE usergroups SET edit_usergroups = ? WHERE id = ?";
+        $pdo->prepare($sql)->execute(['true', $_SESSION['editing_group']]);
+    } else { //Is not checked
+        $sql = "UPDATE usergroups SET edit_usergroups = ? WHERE id = ?";
         $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);
     }
 

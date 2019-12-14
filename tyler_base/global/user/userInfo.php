@@ -26,6 +26,7 @@ if(!isset($_SESSION['user_id'])) {
     $user['display_name'] = $userRow['display_name'];
     $user['joined'] = $userRow['joined'];
     $user['usergroup'] = $userRow['usergroup'];
+    $user['discord_id'] = $userRow['discord_id'];
 
     require_once 'userGroups.php';
 }

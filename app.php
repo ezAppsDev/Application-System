@@ -53,10 +53,8 @@ if (isset($_GET['id'])) {
         $_SESSION['app_ug_name'] = $appugDB['name'];
 
         if ($_SESSION['app_user'] <> $_SESSION['user_id']) {
-            if (super_admin === 'false') {
-                if (app_management === 'false') {
-                    notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
-                }
+            if (super_admin === 'false' && view_apps === 'false') {
+                notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
             }
         }
     }
@@ -84,7 +82,18 @@ if (isset($_POST['acceptApp'])) {
     $sql = "UPDATE applicants SET accepted_by = ? WHERE id = ?";
     $pdo->prepare($sql)->execute(['<hr><strong>Accepted by '.$user['display_name'].' (ID: '.$_SESSION['user_id'].')</strong>', $_SESSION['app_id']]); 
 
-    logger('Accepted an application - Application ID: '.$_SESSION['app_id'].'');
+    if ($webhook['app_accepted'] === 'true') {
+        $whUI = "SELECT id,display_name,discord_id FROM users WHERE id = ?";
+        $whUI = $pdo->prepare($whUI);
+        $whUI->execute([$_SESSION['app_user']]);
+        $whUI = $whUI->fetch(PDO::FETCH_ASSOC);
+        
+        if ($whUI['discord_id'] <> NULL) {
+            discordAlert($whUI['display_name'] . ' (<@' . $whUI['discord_id'] . '>)\'s '.$_SESSION['app_i_name'].' application was accepted on '. $datetime . ' by '. $user['display_name'] . ' (UID: '. $_SESSION['user_id'] . ')');
+        }
+    }
+
+    logger($_SESSION['user_id'] . ' Accepted an application - Application ID: '.$_SESSION['app_id'].'');
     notify('success', 'Application Accepted', DOMAIN.'/app?id='.$_SESSION['app_id']);
 }
 
@@ -98,7 +107,18 @@ if (isset($_POST['declineApp'])) {
     $sql = "UPDATE applicants SET denial_reason = ? WHERE id = ?";
     $pdo->prepare($sql)->execute([$denial_reason . '<hr><strong>Declined by '.$user['display_name'].' (ID: '.$_SESSION['user_id'].')</strong>', $_SESSION['app_id']]); 
 
-    logger('Declined an application - Application ID: '.$_SESSION['app_id'].'');
+    if ($webhook['app_declined'] === 'true') {
+        $whUI = "SELECT id,display_name,discord_id FROM users WHERE id = ?";
+        $whUI = $pdo->prepare($whUI);
+        $whUI->execute([$_SESSION['app_user']]);
+        $whUI = $whUI->fetch(PDO::FETCH_ASSOC);
+        
+        if ($whUI['discord_id'] <> NULL) {
+            discordAlert($whUI['display_name'] . ' (<@' . $whUI['discord_id'] . '>)\'s '.$_SESSION['app_i_name'].' application was declined on '. $datetime . ' by '. $user['display_name'] . ' (UID: '. $_SESSION['user_id'] . ') with the reason: ' . $denial_reason);
+        }
+    }
+
+    logger($_SESSION['user_id'] . 'Declined an application - Application ID: '.$_SESSION['app_id'].'');
     notify('success', 'Application Denied', DOMAIN.'/app?id='.$_SESSION['app_id']);
 }
 
@@ -108,9 +128,7 @@ if (isset($_GET['c'])) {
 
     //Make sure they're staff
     if (super_admin === 'false') {
-        if (app_management === 'false') {
-            notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
-        }
+        notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
     }
 
     //If the comment needs to be hidden
@@ -203,7 +221,7 @@ if (isset($_GET['c'])) {
                                     </div>
                                     <div class="mail-info">
                                         <div class="mail-author">
-                                            <img src="./assets/images/avatars/placeholder.png" alt="">
+                                            <img src="<?php echo DOMAIN; ?>/assets/themes/<?php echo $config['theme']; ?>/images/avatars/placeholder.png" alt="">
                                             <div class="mail-author-info">
                                                 <span
                                                     class="mail-author-name"><?php echo $_SESSION['app_u_name']; ?></span>
@@ -219,8 +237,8 @@ if (isset($_GET['c'])) {
                                     <div class="mail-text">
                                         <p><?php echo nl2br($_SESSION['app_format']); ?></p>
                                     </div>
-                                    <?php if (super_admin === 'true' || app_management === 'true'): ?>
-                                    <hr>
+                                    <?php if (super_admin === 'true' || review_apps === 'true'): ?>
+                                    <div class="divider"></div>
                                     <div class="mail-actions">
                                         <form method="post" class="form-inline">
                                             <?php if($_SESSION['app_status'] === 'PENDING'): ?>
@@ -330,7 +348,7 @@ if (isset($_GET['c'])) {
                                     </div>
                                     <div class="mail-info">
                                         <div class="mail-author">
-                                            <img src="./assets/images/avatars/placeholder.png" alt="">
+                                            <img src="<?php echo DOMAIN; ?>/assets/themes/<?php echo $config['theme']; ?>/images/avatars/placeholder.png" alt="">
                                             <div class="mail-author-info">
                                                 <span
                                                     class="mail-author-name"><?php echo $replyuDB['display_name']; ?></span>
@@ -353,7 +371,7 @@ if (isset($_GET['c'])) {
                     <?php endif; ?>
                 </div>
                 <?php } ?>
-                <?php if (super_admin === 'true' || app_management === 'true'): ?>
+                <?php if (super_admin === 'true' || review_apps === 'true'): ?>
                 <?php if($_SESSION['app_status'] === 'PENDING'): ?>
                 <!-- Decline App Modal -->
                 <div class="modal fade" id="declineApp" tabindex="-1" role="dialog" aria-labelledby="declineApp"

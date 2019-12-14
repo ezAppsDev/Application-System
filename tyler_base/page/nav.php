@@ -14,11 +14,11 @@
                 <li>
                     <a href="<?php echo DOMAIN; ?>/thank-you"><i class="material-icons">star</i>Credit</a>
                 </li>
-                <?php if (super_admin === 'true' || app_management === 'true'): ?>
+                <?php if (super_admin === 'true'): ?>
                 <li class="sidebar-title">
                 Admin
                 </li>
-                <?php if(super_admin === 'true' || app_management === 'true'): ?>
+                <?php if(super_admin === 'true'): ?>
                 <li>
                     <a href="#"><i class="material-icons">description</i>Applications<i
                             class="material-icons has-sub-menu">keyboard_arrow_left</i></a>

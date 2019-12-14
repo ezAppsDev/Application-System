@@ -11,10 +11,8 @@ if (!loggedIn) {
 }
 
 //Check if they're staff and have permissions
-if (super_admin === 'false') {
-    if (app_management === 'false') {
-        notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
-    }
+if (super_admin === 'false' && view_apps === 'false') {
+    notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
 }
 
 //Check if any applications exist

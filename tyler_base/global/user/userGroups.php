@@ -19,11 +19,21 @@ $group['id'] = $groupRow['id'];
 $group['name'] = $groupRow['name'];
 $group['access'] = $groupRow['access'];
 $group['super_admin'] = $groupRow['super_admin'];
-$group['app_management'] = $groupRow['app_management'];
+$group['view_apps'] = $groupRow['view_apps'];
+$group['review_apps'] = $groupRow['review_apps'];
+$group['view_users'] = $groupRow['view_users'];
+$group['view_usergroups'] = $groupRow['view_usergroups'];
+$group['edit_users'] = $groupRow['edit_users'];
+$group['edit_usergroups'] = $groupRow['edit_usergroups'];
 
 define("access", $group['access']);
 define("super_admin", $group['super_admin']);
-define("app_management", $group['app_management']);
+define("view_apps", $group['view_apps']);
+define("review_apps", $group['review_apps']);
+define("view_users", $group['view_users']);
+define("view_usergroups", $group['view_usergroups']);
+define("edit_users", $group['edit_users']);
+define("edit_usergroups", $group['edit_usergroups']);
 
 if (access === 'false') {
     session_unset();

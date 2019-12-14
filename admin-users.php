@@ -11,7 +11,7 @@ if (!loggedIn) {
 }
 
 //Check if they're staff and have permissions
-if (super_admin === 'false') {
+if (super_admin === 'false' && view_users === 'false') {
     notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
 }
 ?>
