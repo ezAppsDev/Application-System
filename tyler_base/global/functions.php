@@ -124,6 +124,31 @@ function apps() {
     }
 }
 
+function locale($term) {
+    if (LOCALE) {
+        $localeSetting = 'en';
+        switch (LOCALE) {
+            case 'es':
+                $localeSetting = 'es';
+                break;
+            case 'fr':
+                $localeSetting = 'fr';
+                break;
+        }
+        include 'tyler_base/locales/'.$localeSetting.'.php';
+        $result = $localeDictionary[$term];
+        if ($result) {
+            return $result;
+        } else {
+            return 'Locale Error';
+        }
+    } else {
+        return 'Locale Error';
+    }
+
+
+}
+
 // Log Function
 function logger($action) {
     global $pdo;

@@ -7,7 +7,6 @@ $locale = 'en'; // en -> English, es -> Spanish, fr -> French
 
 //EDIT THIS TO YOUR DOMAIN. DO NOT INCLUDE A TRAILING SLASH
 $domain = 'http://localhost';
-define("DOMAIN", $domain);
 
 // REGULAR USERS SHOULD NOT TOUCH THIS. DEVELOPER ONLY.
 $demo = false;
@@ -36,6 +35,9 @@ $datetime = $us_date . ' ' . $time;
 $doul = $_SERVER['HTTP_HOST'];
 $message = '';
 $sqltimestamp = date('Y-m-d H:i:s', time());
+
+define("DOMAIN", $domain);
+define("LOCALE", $locale);
 
 require 'user/userInfo.php';
 require "notify.php";
