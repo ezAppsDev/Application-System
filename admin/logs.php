@@ -1,6 +1,8 @@
 <?php
 session_name('ezApps');
-session_start();
+if(!isset($_SESSION)){ 
+    session_start();
+}
 require '../tyler_base/global/connect.php';
 require '../tyler_base/global/config.php';
 $page['name'] = 'View Logs';
@@ -58,7 +60,8 @@ if (super_admin === 'false') {
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <button type="submit" name="login" class="btn btn-link float-right"><i class="fas fa-search"></i></button>
+                                            <button type="submit" name="login" class="btn btn-link float-right"><i
+                                                    class="fas fa-search"></i></button>
                                         </div>
                                     </div>
                                 </form>

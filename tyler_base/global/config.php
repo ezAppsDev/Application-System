@@ -1,10 +1,10 @@
 <?php
-$version = '1.1.1';
+$version = '1.1.2';
 $assets_ver = '01';
 require_once 'functions.php';
 
 //EDIT THIS TO YOUR DOMAIN. DO NOT INCLUDE A TRAILING SLASH
-$domain = 'http://localhost';
+$domain = 'http://localhost/ezApps';
 define("DOMAIN", $domain);
 
 // REGULAR USERS SHOULD NOT TOUCH THIS. DEVELOPER ONLY.
@@ -24,7 +24,6 @@ $webhook['app_created'] = $configRow['wh_app_created'];
 $webhook['app_accepted'] = $configRow['wh_app_accepted'];
 $webhook['app_declined'] = $configRow['wh_app_declined'];
 
-apps();
 $user_ip = getUserIP();
 $date = date('Y-m-d');
 $year = date('Y');

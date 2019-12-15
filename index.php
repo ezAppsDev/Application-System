@@ -1,6 +1,8 @@
 <?php
 session_name('ezApps');
-session_start();
+if(!isset($_SESSION)){ 
+    session_start();
+}
 require 'tyler_base/global/connect.php';
 require 'tyler_base/global/config.php';
 $page['name'] = 'Home';
@@ -27,10 +29,21 @@ $dbCount['my_apps'] = $pdo->query('select count(*) from applicants WHERE user="'
     <div class="lime-container">
         <div class="lime-body">
             <div class="container">
-            <div id="ezaMsg"><?php if (isset($message)) { echo $message; } ?></div>
-                <?php if($wh <> NULL && $user['discord_id'] === NULL): ?>
+                <?php 
+                    $json = file_get_contents("https://raw.githubusercontent.com/ezAppsDev/Application-System/master/version.json");
+                    $curVer = json_decode($json);
+                    $newVer = $curVer->version;
+                    if ($newVer > $version) {
+                        echo '<div class="alert alert-danger m-b-lg" role="alert"><strong>OUTDATED SOFTWARE - This community is using an outdated version of ezApps. Updates are pushed that include new features, and security updates. Please update at</strong> https://github.com/ezAppsDev/Application-System</div>';
+                    }
+                ?>
+                <div id="ezaMsg"><?php if (isset($message)) { echo $message; } ?></div>
+                <?php if ($wh <> null && $user['discord_id'] === null): ?>
                 <div class="alert alert-info m-b-lg" role="alert">
-                    Hey <?php echo $user['display_name']; ?>! This community has discord webhooks enabled but you don't seem to have a Discord ID linked :( Click <a href="<?php echo DOMAIN; ?>/3rdparty/discord?action=auth">here</a> to link your Discord ID and get the most out of ezApps including notifications via Discord of your application status!
+                    Hey <?php echo $user['display_name']; ?>! This community has discord webhooks enabled but you don't
+                    seem to have a Discord ID linked :( Click <a
+                        href="<?php echo DOMAIN; ?>/3rdparty/discord?action=auth">here</a> to link your Discord ID and
+                    get the most out of ezApps including notifications via Discord of your application status!
                 </div>
                 <?php endif; ?>
                 <div class="row">
@@ -56,7 +69,7 @@ $dbCount['my_apps'] = $pdo->query('select count(*) from applicants WHERE user="'
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">My Applications</h5>
-                                <?php if($dbCount['my_apps'] === 0): ?>
+                                <?php if ($dbCount['my_apps'] === 0): ?>
                                 <div class="alert alert-warning m-b-lg" role="alert">
                                     You have not submitted any applications. After you submit one, it'll appear here!
                                 </div>
@@ -73,7 +86,7 @@ $dbCount['my_apps'] = $pdo->query('select count(*) from applicants WHERE user="'
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php 
+                                            <?php
                                                 $getApplicationsDB = "SELECT * FROM applicants WHERE user=?";
                                                 $getApplicationsDB = $pdo->prepare($getApplicationsDB);
                                                 $getApplicationsDB->execute([$_SESSION['user_id']]);

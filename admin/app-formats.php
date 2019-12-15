@@ -1,6 +1,8 @@
 <?php
 session_name('ezApps');
-session_start();
+if(!isset($_SESSION)){ 
+    session_start();
+}
 require '../tyler_base/global/connect.php';
 require '../tyler_base/global/config.php';
 $page['name'] = 'Application Formats';
@@ -117,21 +119,25 @@ if (isset($_POST['deleteApp'])) {
     <div class="lime-container">
         <div class="lime-body">
             <div class="container">
-            <div id="ezaMsg"><?php if (isset($message)) { echo $message; } ?></div>
+                <div id="ezaMsg"><?php if (isset($message)) { echo $message; } ?></div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Application Formats 
-                                <button type="button" class="btn btn-success btn-sm float-right mb-3" data-toggle="modal" data-target="#addApplicationModal">+ New</button></h5>
-                                
+                                <h5 class="card-title">Application Formats
+                                    <button type="button" class="btn btn-success btn-sm float-right mb-3"
+                                        data-toggle="modal" data-target="#addApplicationModal">+ New</button></h5>
+
                                 <!-- Create App Format Modal -->
-                                <div class="modal fade" id="addApplicationModal" tabindex="-1" role="dialog" aria-labelledby="addApplicationModal" aria-hidden="true">
+                                <div class="modal fade" id="addApplicationModal" tabindex="-1" role="dialog"
+                                    aria-labelledby="addApplicationModal" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="addApplicationModal">New Application Format</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <h5 class="modal-title" id="addApplicationModal">New Application Format
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
                                                     <i class="material-icons">close</i>
                                                 </button>
                                             </div>
@@ -140,23 +146,30 @@ if (isset($_POST['deleteApp'])) {
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="form-group">
-                                                                <input type="text" class="form-control" name="app_name" id="app_name" placeholder="Application Name" required>
+                                                                <input type="text" class="form-control" name="app_name"
+                                                                    id="app_name" placeholder="Application Name"
+                                                                    required>
                                                             </div>
                                                             <div class="form-group">
-                                                                <textarea class="form-control" rows="4" name="app_format" id="app_format" placeholder="Application Format" required></textarea>
+                                                                <textarea class="form-control" rows="4"
+                                                                    name="app_format" id="app_format"
+                                                                    placeholder="Application Format"
+                                                                    required></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                    <button type="submit" name="createAppFormat" class="btn btn-primary">Create</button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Cancel</button>
+                                                    <button type="submit" name="createAppFormat"
+                                                        class="btn btn-primary">Create</button>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <?php if($dbCount['app_formats'] === 0): ?>
                                 <div class="row">
                                     <div class="col-md-12">
@@ -166,7 +179,7 @@ if (isset($_POST['deleteApp'])) {
                                     </div>
                                 </div>
                                 <?php else: ?>
-                                    <div class="table-responsive">
+                                <div class="table-responsive">
                                     <table class="table">
                                         <thead>
                                             <tr>
@@ -209,7 +222,8 @@ if (isset($_POST['deleteApp'])) {
                 </div>
 
                 <!-- Edit App Format Modal -->
-                <div class="modal fade" id="AppEditorModal" tabindex="-1" role="dialog" aria-labelledby="AppEditorModal" aria-hidden="true">
+                <div class="modal fade" id="AppEditorModal" tabindex="-1" role="dialog" aria-labelledby="AppEditorModal"
+                    aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -231,12 +245,14 @@ if (isset($_POST['deleteApp'])) {
     <?php require '../tyler_base/page/footer.php'; ?>
     <script type="text/javascript">
     $(document).ready(function() {
-      $('.openAppEditorModal').on('click',function(){
-          var dataURL = $(this).attr('data-href');
-          $('#openAppEditorModalBody.modal-body').load(dataURL,function(){
-              $('#AppEditorModal').modal({show:true});
-          });
-      });
+        $('.openAppEditorModal').on('click', function() {
+            var dataURL = $(this).attr('data-href');
+            $('#openAppEditorModalBody.modal-body').load(dataURL, function() {
+                $('#AppEditorModal').modal({
+                    show: true
+                });
+            });
+        });
     });
     </script>
 </body>

@@ -1,6 +1,8 @@
 <?php
 session_name('ezApps');
-session_start();
+if(!isset($_SESSION)){ 
+    session_start();
+}
 require 'tyler_base/global/connect.php';
 require 'tyler_base/global/config.php';
 $page['name'] = 'Create Account';
@@ -57,42 +59,50 @@ if (isset($_POST['register'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <?php require 'tyler_base/page/header.php'; ?>
-    </head>
-    <body class="login-page err-500">
-        <div class="container">
-            <div class="login-container">
-                <div class="row">
-                    <div class="col-lg-4 col-md-5 col-sm-9 lfh">
-                        <div class="card login-box">
-                            <div class="card-body">
-                                <h5 class="card-title">Create Account</h5>
-                                <?php demoAlert(); ?>
-                                <div id="ezaMsg"><?php if (isset($message)) { echo $message; } ?></div>
-                                <form method="post">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" name="display_name" id="displayName" placeholder="Display Name" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="password" class="form-control" name="passwordc" id="passwordc" placeholder="Confirm Password" required>
-                                    </div>
-                                    <div class="custom-control custom-checkbox form-group">
-                                        <input type="checkbox" class="custom-control-input" name="ageCheck" id="ageCheck" required>
-                                        <label class="custom-control-label" for="ageCheck">I Agree that I am at least 13 year(s) old.</label>
-                                    </div>
-                                    <button type="submit" name="register" class="btn btn-primary">Finish Creation</button>
-                                    <a href="./login" class="btn btn-secondary float-right">Login</a>
-                                </form>
-                            </div>
+
+<head>
+    <?php require 'tyler_base/page/header.php'; ?>
+</head>
+
+<body class="login-page err-500">
+    <div class="container">
+        <div class="login-container">
+            <div class="row">
+                <div class="col-lg-4 col-md-5 col-sm-9 lfh">
+                    <div class="card login-box">
+                        <div class="card-body">
+                            <h5 class="card-title">Create Account</h5>
+                            <?php demoAlert(); ?>
+                            <div id="ezaMsg"><?php if (isset($message)) { echo $message; } ?></div>
+                            <form method="post">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="display_name" id="displayName"
+                                        placeholder="Display Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control" name="password" id="password"
+                                        placeholder="Password" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control" name="passwordc" id="passwordc"
+                                        placeholder="Confirm Password" required>
+                                </div>
+                                <div class="custom-control custom-checkbox form-group">
+                                    <input type="checkbox" class="custom-control-input" name="ageCheck" id="ageCheck"
+                                        required>
+                                    <label class="custom-control-label" for="ageCheck">I Agree that I am at least 13
+                                        year(s) old.</label>
+                                </div>
+                                <button type="submit" name="register" class="btn btn-primary">Finish Creation</button>
+                                <a href="./login" class="btn btn-secondary float-right">Login</a>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <?php require 'tyler_base/page/footer.php'; ?>
-    </body>
+    </div>
+    <?php require 'tyler_base/page/footer.php'; ?>
+</body>
+
 </html>

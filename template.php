@@ -1,6 +1,8 @@
 <?php
 session_name('ezApps');
-session_start();
+if(!isset($_SESSION)){ 
+    session_start();
+}
 require 'tyler_base/global/connect.php';
 require 'tyler_base/global/config.php';
 $page['name'] = 'Home';
@@ -23,7 +25,7 @@ if (!loggedIn) {
     <div class="lime-container">
         <div class="lime-body">
             <div class="container">
-            <div id="ezaMsg"><?php if (isset($message)) { echo $message; } ?></div>
+                <div id="ezaMsg"><?php if (isset($message)) { echo $message; } ?></div>
                 <div class="row">
                     <div class="col-md-8">
                         <div class="card bg-info text-white">

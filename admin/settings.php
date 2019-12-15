@@ -1,6 +1,8 @@
 <?php
 session_name('ezApps');
-session_start();
+if(!isset($_SESSION)){ 
+    session_start();
+}
 require '../tyler_base/global/connect.php';
 require '../tyler_base/global/config.php';
 $page['name'] = 'Site Settings';
@@ -87,7 +89,7 @@ if (isset($_POST['updateSettings'])) {
     <div class="lime-container">
         <div class="lime-body">
             <div class="container">
-            <div id="ezaMsg"><?php if (isset($message)) { echo $message; } ?></div>
+                <div id="ezaMsg"><?php if (isset($message)) { echo $message; } ?></div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
@@ -98,15 +100,20 @@ if (isset($_POST['updateSettings'])) {
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="site_name">Website Name / Community Name</label>
-                                                <input type="text" class="form-control" name="site_name" id="site_name" value="<?php echo $config['name']; ?>" placeholder="Website Name / Community Name">
+                                                <input type="text" class="form-control" name="site_name" id="site_name"
+                                                    value="<?php echo $config['name']; ?>"
+                                                    placeholder="Website Name / Community Name">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label for="webhook">Discord Webhook <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#discordWebhookSettings">Settings</button></label>
-                                                <input type="text" class="form-control" name="webhook" id="webhook" value="<?php echo $wh; ?>" placeholder="Leave blank to disable">
+                                                <label for="webhook">Discord Webhook <button type="button"
+                                                        class="btn btn-link btn-sm" data-toggle="modal"
+                                                        data-target="#discordWebhookSettings">Settings</button></label>
+                                                <input type="text" class="form-control" name="webhook" id="webhook"
+                                                    value="<?php echo $wh; ?>" placeholder="Leave blank to disable">
                                             </div>
                                         </div>
                                     </div>
@@ -115,8 +122,10 @@ if (isset($_POST['updateSettings'])) {
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="discordWebhookSettings">When Should We Send A Discord Notification?</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <h5 class="modal-title" id="discordWebhookSettings">When Should We
+                                                        Send A Discord Notification?</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
                                                         <i class="material-icons">close</i>
                                                     </button>
                                                 </div>
@@ -124,16 +133,25 @@ if (isset($_POST['updateSettings'])) {
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="form-group">
-                                                                <input type="checkbox" name="wh_app_created" id="wh_app_created" <?php if ($webhook['app_created'] === 'true') {echo 'checked';} ?>>
-                                                                <label class="label" for="wh_app_created">Applications Created</label>
+                                                                <input type="checkbox" name="wh_app_created"
+                                                                    id="wh_app_created"
+                                                                    <?php if ($webhook['app_created'] === 'true') {echo 'checked';} ?>>
+                                                                <label class="label" for="wh_app_created">Applications
+                                                                    Created</label>
                                                             </div>
                                                             <div class="form-group">
-                                                                <input type="checkbox" name="wh_app_accepted" id="wh_app_accepted" <?php if ($webhook['app_accepted'] === 'true') {echo 'checked';} ?>>
-                                                                <label class="label" for="wh_app_accepted">Applications Accepted</label>
+                                                                <input type="checkbox" name="wh_app_accepted"
+                                                                    id="wh_app_accepted"
+                                                                    <?php if ($webhook['app_accepted'] === 'true') {echo 'checked';} ?>>
+                                                                <label class="label" for="wh_app_accepted">Applications
+                                                                    Accepted</label>
                                                             </div>
                                                             <div class="form-group">
-                                                                <input type="checkbox" name="wh_app_declined" id="wh_app_declined" <?php if ($webhook['app_declined'] === 'true') {echo 'checked';} ?>>
-                                                                <label class="label" for="wh_app_declined">Applications Declined</label>
+                                                                <input type="checkbox" name="wh_app_declined"
+                                                                    id="wh_app_declined"
+                                                                    <?php if ($webhook['app_declined'] === 'true') {echo 'checked';} ?>>
+                                                                <label class="label" for="wh_app_declined">Applications
+                                                                    Declined</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -145,7 +163,9 @@ if (isset($_POST['updateSettings'])) {
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="app_accepted">Application Accepted Message</label>
-                                                <textarea class="form-control" rows="4" name="app_accepted" id="app_accepted" placeholder="Application Accepted Message" required><?php echo $config['app_accept_message']; ?></textarea>
+                                                <textarea class="form-control" rows="4" name="app_accepted"
+                                                    id="app_accepted" placeholder="Application Accepted Message"
+                                                    required><?php echo $config['app_accept_message']; ?></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -154,7 +174,8 @@ if (isset($_POST['updateSettings'])) {
                                             <div class="form-group">
                                                 <label for="theme">Theme</label>
                                                 <select class="form-control custom-select" id="theme" name="theme">
-                                                    <option value="<?php echo $config['theme']; ?>" selected disabled><?php echo $config['theme']; ?> (Current)</option>
+                                                    <option value="<?php echo $config['theme']; ?>" selected disabled>
+                                                        <?php echo $config['theme']; ?> (Current)</option>
                                                     <option value="default">default</option>
                                                     <option vaule="dark">dark</option>
                                                 </select>
@@ -162,7 +183,8 @@ if (isset($_POST['updateSettings'])) {
                                         </div>
                                     </div>
                                     <hr>
-                                    <button type="submit" name="updateSettings" class="btn btn-success">Update Settings</button>
+                                    <button type="submit" name="updateSettings" class="btn btn-success">Update
+                                        Settings</button>
                                 </form>
                             </div>
                         </div>

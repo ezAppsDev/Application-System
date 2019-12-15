@@ -1,6 +1,8 @@
 <?php
 session_name('ezApps');
-session_start();
+if(!isset($_SESSION)){ 
+    session_start();
+}
 require 'tyler_base/global/connect.php';
 require 'tyler_base/global/config.php';
 $page['name'] = 'User Profile';
@@ -133,11 +135,13 @@ if (isset($_GET['purge'])) {
                                             <?php echo $_SESSION['profile_joined']; ?></span></li>
                                     <li><i class="material-icons">group_add</i><span>Usergroup:
                                             <?php echo $_SESSION['profile_usergroup_name']; ?></span></li>
+                                    <?php if($_SESSION['profile_discord_id'] <> NULL): ?>
                                     <li><i class="material-icons">account_box</i><span>Discord ID:
-                                            <?php echo $_SESSION['profile_discord_id']; ?></span></li>
-                                    <?php if($_SESSION['profile_owner'] === 'true' || super_admin === 'true'): ?>
+                                        <?php echo $_SESSION['profile_discord_id']; ?></span></li>
+                                    <?php endif; ?>
+                                    <?php if($_SESSION['profile_owner'] === 'true' || super_admin === 'true' || edit_users === 'true'): ?>
                                     <hr>
-                                    <?php if(super_admin === 'true' && edit_users === 'false'): ?>
+                                    <?php if(super_admin === 'true' || edit_users === 'true'): ?>
                                     <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
                                         data-target="#adminUserSettings">Admin</button>
                                     <!-- Admin User Settings Modal -->

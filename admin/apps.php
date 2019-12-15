@@ -1,6 +1,8 @@
 <?php
 session_name('ezApps');
-session_start();
+if(!isset($_SESSION)){ 
+    session_start();
+}
 require '../tyler_base/global/connect.php';
 require '../tyler_base/global/config.php';
 $page['name'] = 'View Applications';
@@ -31,13 +33,13 @@ $dbCount['applicants'] = $pdo->query('select count(*) from applicants')->fetchCo
     <div class="lime-container">
         <div class="lime-body">
             <div class="container">
-            <div id="ezaMsg"><?php if (isset($message)) { echo $message; } ?></div>
+                <div id="ezaMsg"><?php if (isset($message)) { echo $message; } ?></div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Submitted Applications</h5>
-                                
+
                                 <?php if($dbCount['applicants'] === 0): ?>
                                 <div class="row">
                                     <div class="col-md-12">
@@ -47,7 +49,7 @@ $dbCount['applicants'] = $pdo->query('select count(*) from applicants')->fetchCo
                                     </div>
                                 </div>
                                 <?php else: ?>
-                                    <div class="table-responsive">
+                                <div class="table-responsive">
                                     <table id="appsTable" class="table">
                                         <thead>
                                             <tr>
@@ -59,7 +61,7 @@ $dbCount['applicants'] = $pdo->query('select count(*) from applicants')->fetchCo
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <?php 
+                                            <?php 
                                                 $getApplicationsDB = "SELECT * FROM applicants";
                                                 $getApplicationsDB = $pdo->prepare($getApplicationsDB);
                                                 $getApplicationsDB->execute();
@@ -94,7 +96,8 @@ $dbCount['applicants'] = $pdo->query('select count(*) from applicants')->fetchCo
                 </div>
 
                 <!-- Edit App Format Modal -->
-                <div class="modal fade" id="AppEditorModal" tabindex="-1" role="dialog" aria-labelledby="AppEditorModal" aria-hidden="true">
+                <div class="modal fade" id="AppEditorModal" tabindex="-1" role="dialog" aria-labelledby="AppEditorModal"
+                    aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -116,12 +119,14 @@ $dbCount['applicants'] = $pdo->query('select count(*) from applicants')->fetchCo
     <?php require '../tyler_base/page/footer.php'; ?>
     <script type="text/javascript">
     $(document).ready(function() {
-      $('.openAppEditorModal').on('click',function(){
-          var dataURL = $(this).attr('data-href');
-          $('#openAppEditorModalBody.modal-body').load(dataURL,function(){
-              $('#AppEditorModal').modal({show:true});
-          });
-      });
+        $('.openAppEditorModal').on('click', function() {
+            var dataURL = $(this).attr('data-href');
+            $('#openAppEditorModalBody.modal-body').load(dataURL, function() {
+                $('#AppEditorModal').modal({
+                    show: true
+                });
+            });
+        });
     });
     </script>
 </body>

@@ -1,6 +1,8 @@
 <?php
 session_name('ezApps');
-session_start();
+if(!isset($_SESSION)){ 
+    session_start();
+}
 require 'tyler_base/global/connect.php';
 require 'tyler_base/global/config.php';
 $page['name'] = 'Apply';
@@ -90,8 +92,17 @@ if (isset($_POST['applyApp'])) {
                                                 $appsDB = $getApplicationsDB->fetchAll(PDO::FETCH_ASSOC);
                                                 
                                                 foreach ($appsDB as $appDB) {
+                                                    $dbCount['pendingApps'] = "SELECT count(*) FROM applicants WHERE user=? AND app=? AND status='PENDING'";
+                                                    $dbCount['pendingApps'] = $pdo->prepare($dbCount['pendingApps']);
+                                                    $dbCount['pendingApps']->execute([$_SESSION['user_id'], $appDB['id']]);
+                                                    $dbCount['pendingApps'] = $dbCount['pendingApps']->fetchColumn();
+
                                                     echo '<tr><td>'.$appDB['name'].'</td>';
-                                                    echo '<td><a class="btn btn-success btn-sm openApplyModal" href="javascript:void(0);" data-href="'.DOMAIN.'/tyler_base/ajax/admin/applications/apply.php?appID='.$appDB['id'].'" role="button">Apply</a></td></tr>';
+                                                    if ($dbCount['pendingApps'] < 1) {
+                                                        echo '<td><a class="btn btn-success btn-sm openApplyModal" href="javascript:void(0);" data-href="'.DOMAIN.'/tyler_base/ajax/admin/applications/apply.php?appID='.$appDB['id'].'" role="button">Apply</a></td></tr>';
+                                                    } else {
+                                                        echo '<td><a class="btn btn-success btn-sm disabled" role="button">Apply</a></td></tr>';
+                                                    }
                                                 }
                                             ?>
                                         </tbody>
