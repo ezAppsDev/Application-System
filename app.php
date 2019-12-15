@@ -3,7 +3,7 @@ session_name('ezApps');
 session_start();
 require 'tyler_base/global/connect.php';
 require 'tyler_base/global/config.php';
-$page['name'] = 'Viewing App';
+$page['name'] = locale('viewingapp');
 
 if (!loggedIn) {
     header('Location: '.DOMAIN.'/login');
@@ -19,7 +19,7 @@ if (isset($_GET['id'])) {
     $app = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($app === false) {
-        notify('danger', 'That application does not exist.', DOMAIN.'/index');
+        notify('danger', locale('appnotexist'), DOMAIN.'/index');
     } else {
         $_SESSION['app_id'] = $id;
         $_SESSION['app_user'] = $app['user'];
@@ -54,7 +54,7 @@ if (isset($_GET['id'])) {
 
         if ($_SESSION['app_user'] <> $_SESSION['user_id']) {
             if (super_admin === 'false' && view_apps === 'false') {
-                notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
+                notify('danger', locale('accessdenied'), DOMAIN.'/index');
             }
         }
     }
@@ -69,8 +69,8 @@ if (isset($_POST['addComment'])) {
     $stmt1         = $pdo->prepare($sql1);
     $result_ac   = $stmt1->execute([$_SESSION['app_id'], $_SESSION['user_id'], $datetime, $comment]);
     if ($result_ac) {
-        logger('Commented on an application - Application ID: '.$_SESSION['app_id'].' <br />Comment: '.$comment.'');
-        notify('success', 'Comment added.', DOMAIN.'/app?id='.$_SESSION['app_id']);
+        logger(locale('newcommentnotif').': '.$_SESSION['app_id'].' <br />'.locale('comment').': '.$comment.'');
+        notify('success', locale('commentadded'), DOMAIN.'/app?id='.$_SESSION['app_id']);
     }
 }
 
@@ -80,7 +80,7 @@ if (isset($_POST['acceptApp'])) {
     $pdo->prepare($sql)->execute(['ACCEPTED', $_SESSION['app_id']]); 
 
     $sql = "UPDATE applicants SET accepted_by = ? WHERE id = ?";
-    $pdo->prepare($sql)->execute(['<hr><strong>Accepted by '.$user['display_name'].' (ID: '.$_SESSION['user_id'].')</strong>', $_SESSION['app_id']]); 
+    $pdo->prepare($sql)->execute(['<hr><strong>'.locale('acceptedby').' '.$user['display_name'].' ('.locale('id').': '.$_SESSION['user_id'].')</strong>', $_SESSION['app_id']]); 
 
     if ($webhook['app_accepted'] === 'true') {
         $whUI = "SELECT id,display_name,discord_id FROM users WHERE id = ?";
@@ -89,12 +89,12 @@ if (isset($_POST['acceptApp'])) {
         $whUI = $whUI->fetch(PDO::FETCH_ASSOC);
         
         if ($whUI['discord_id'] <> NULL) {
-            discordAlert($whUI['display_name'] . ' (<@' . $whUI['discord_id'] . '>)\'s '.$_SESSION['app_i_name'].' application was accepted on '. $datetime . ' by '. $user['display_name'] . ' (UID: '. $_SESSION['user_id'] . ')');
+            discordAlert($whUI['display_name'] . ' (<@' . $whUI['discord_id'] . '>)\'s '.$_SESSION['app_i_name'].' '.locale('appacceptedalert'));
         }
     }
 
-    logger($_SESSION['user_id'] . ' Accepted an application - Application ID: '.$_SESSION['app_id'].'');
-    notify('success', 'Application Accepted', DOMAIN.'/app?id='.$_SESSION['app_id']);
+    logger($_SESSION['user_id'] . ' '.locale('appacceptednotif').': '.$_SESSION['app_id'].'');
+    notify('success', locale('appaccepted'), DOMAIN.'/app?id='.$_SESSION['app_id']);
 }
 
 //Decline app
@@ -105,7 +105,7 @@ if (isset($_POST['declineApp'])) {
     $pdo->prepare($sql)->execute(['DENIED', $_SESSION['app_id']]); 
 
     $sql = "UPDATE applicants SET denial_reason = ? WHERE id = ?";
-    $pdo->prepare($sql)->execute([$denial_reason . '<hr><strong>Declined by '.$user['display_name'].' (ID: '.$_SESSION['user_id'].')</strong>', $_SESSION['app_id']]); 
+    $pdo->prepare($sql)->execute([$denial_reason . '<hr><strong>'.locale('deniedby').': '.$user['display_name'].' ('.locale('id').': '.$_SESSION['user_id'].')</strong>', $_SESSION['app_id']]); 
 
     if ($webhook['app_declined'] === 'true') {
         $whUI = "SELECT id,display_name,discord_id FROM users WHERE id = ?";
@@ -114,12 +114,12 @@ if (isset($_POST['declineApp'])) {
         $whUI = $whUI->fetch(PDO::FETCH_ASSOC);
         
         if ($whUI['discord_id'] <> NULL) {
-            discordAlert($whUI['display_name'] . ' (<@' . $whUI['discord_id'] . '>)\'s '.$_SESSION['app_i_name'].' application was declined on '. $datetime . ' by '. $user['display_name'] . ' (UID: '. $_SESSION['user_id'] . ') with the reason: ' . $denial_reason);
+            discordAlert($whUI['display_name'] . ' (<@' . $whUI['discord_id'] . '>)\'s '.$_SESSION['app_i_name'].' '.locale('appdeniedalert'));
         }
     }
 
-    logger($_SESSION['user_id'] . 'Declined an application - Application ID: '.$_SESSION['app_id'].'');
-    notify('success', 'Application Denied', DOMAIN.'/app?id='.$_SESSION['app_id']);
+    logger($_SESSION['user_id'] . locale('appdeniednotif').': '.$_SESSION['app_id'].'');
+    notify('success', locale('appdenied'), DOMAIN.'/app?id='.$_SESSION['app_id']);
 }
 
 //Check if a comment command is in the url
@@ -128,20 +128,20 @@ if (isset($_GET['c'])) {
 
     //Make sure they're staff
     if (super_admin === 'false') {
-        notify('danger', 'You do not have access to that part of the site.', DOMAIN.'/index');
+        notify('danger', locale('accessdenied'), DOMAIN.'/index');
     }
 
     //If the comment needs to be hidden
     if (isset($_GET['hide']) && strip_tags($_GET['hide']) === 'true') {
         $sql = "UPDATE applicant_comments SET hidden = ? WHERE id = ?";
         $pdo->prepare($sql)->execute(['true', $c]);
-        logger('Hid a comment - Application ID: '.$_SESSION['app_id'].' ... Comment ID: '.$c.'');
-        notify('success', 'Comment Hidden', DOMAIN.'/app?id='.$_SESSION['app_id']);
+        logger(locale('commenthidnotif').': '.$_SESSION['app_id'].' ... '.locale('comment').locale('id').': '.$c.'');
+        notify('success', locale('commenthidden'), DOMAIN.'/app?id='.$_SESSION['app_id']);
     } elseif (isset($_GET['hide']) && strip_tags($_GET['hide']) === 'false') {
         $sql = "UPDATE applicant_comments SET hidden = ? WHERE id = ?";
         $pdo->prepare($sql)->execute(['false', $c]);
-        logger('Unhid a comment - Application ID: '.$_SESSION['app_id'].' ... Comment ID: '.$c.'');
-        notify('success', 'Comment Unhidden', DOMAIN.'/app?id='.$_SESSION['app_id']);
+        logger(locale('commentunhidnotif').': '.$_SESSION['app_id'].' ... '.locale('comment').locale('id').': '.$c.'');
+        notify('success', locale('commentunhidden'), DOMAIN.'/app?id='.$_SESSION['app_id']);
     }
 }
 ?>
@@ -176,12 +176,12 @@ if (isset($_GET['c'])) {
                                 <div class="mail-container">
                                     <div class="mail-header">
                                         <div class="mail-title">
-                                            <?php echo $_SESSION['app_i_name']; ?> Application - ID:
+                                            <?php echo $_SESSION['app_i_name']; ?> <?php echo locale('application').' - '.locale('id'); ?>:
                                             <?php echo $_SESSION['app_id']; ?>
                                         </div>
                                         <div class="mail-actions">
                                             <button type="button" class="btn btn-secondary" data-toggle="modal"
-                                                data-target="#replyModal">Comment</button>
+                                                data-target="#replyModal"><?php echo locale('comment'); ?>:</button>
                                         </div>
                                         <!-- Reply Modal -->
                                         <div class="modal fade" id="replyModal" tabindex="-1" role="dialog"
@@ -189,7 +189,7 @@ if (isset($_GET['c'])) {
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="replyModal">Adding Comment</h5>
+                                                        <h5 class="modal-title" id="replyModal"><?php echo locale('addingcomment'); ?></h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
                                                             <i class="material-icons">close</i>
@@ -210,9 +210,9 @@ if (isset($_GET['c'])) {
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
-                                                                data-dismiss="modal">Cancel</button>
+                                                                data-dismiss="modal"><?php echo locale('cancel'); ?></button>
                                                             <button type="submit" name="addComment"
-                                                                class="btn btn-primary">Add</button>
+                                                                class="btn btn-primary"><?php echo locale('add'); ?></button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -243,15 +243,15 @@ if (isset($_GET['c'])) {
                                         <form method="post" class="form-inline">
                                             <?php if($_SESSION['app_status'] === 'PENDING'): ?>
                                             <button type="submit" name="acceptApp"
-                                                class="btn btn-success mr-2">Accept</button>
+                                                class="btn btn-success mr-2"><?php echo locale('accept'); ?></button>
                                             <?php else: ?>
-                                            <button class="btn btn-success mr-2" disabled>Accept</button>
+                                            <button class="btn btn-success mr-2" disabled><?php echo locale('accept'); ?></button>
                                             <?php endif; ?>
                                             <?php if($_SESSION['app_status'] === 'PENDING') :?>
                                             <button type="button" data-toggle="modal" data-target="#declineApp"
-                                                class="btn btn-danger">Decline</button>
+                                                class="btn btn-danger"><?php echo locale('decline'); ?></button>
                                             <?php else: ?>
-                                            <button class="btn btn-danger" disabled>Decline</button>
+                                            <button class="btn btn-danger" disabled><?php echo locale('decline'); ?></button>
                                             <?php endif; ?>
                                         </form>
                                     </div>
@@ -287,7 +287,7 @@ if (isset($_GET['c'])) {
                             <div class="card">
                                 <div class="card-header bg-danger text-white" id="headingOne" data-toggle="collapse"
                                     data-target="#collapse<?php echo $commentDB['id']; ?>" aria-expanded="true" aria-controls="collapse<?php echo $commentDB['id']; ?>">
-                                    Hidden Comment (Click for more)
+                                    <?php echo locale('hiddencomment'); ?>
                                 </div>
                                 <div id="collapse<?php echo $commentDB['id']; ?>" class="collapse" aria-labelledby="headingOne"
                                     data-parent="#hiddenComment<?php echo $commentDB['id']; ?>">
@@ -295,13 +295,13 @@ if (isset($_GET['c'])) {
                                         <div class="mail-container">
                                             <div class="mail-header">
                                                 <div class="mail-title">
-                                                    Comment
+                                                <?php echo locale('comment'); ?>
                                                 </div>
                                                 <?php if(super_admin === 'true'): ?>
                                                 <div class="mail-actions">
                                                     <a class="btn btn-success btn-sm"
                                                         href="<?php echo $_SERVER['REQUEST_URI']; ?>&c=<?php echo $commentDB['id']; ?>&hide=false"
-                                                        role="button">Unhide</a>
+                                                        role="button"><?php echo locale('unhide'); ?></a>
                                                 </div>
                                                 <?php endif; ?>
                                             </div>
@@ -336,13 +336,13 @@ if (isset($_GET['c'])) {
                                 <div class="mail-container">
                                     <div class="mail-header">
                                         <div class="mail-title">
-                                            Comment
+                                        <?php echo locale('comment'); ?>
                                         </div>
                                         <?php if(super_admin === 'true'): ?>
                                         <div class="mail-actions">
                                             <a class="btn btn-danger btn-sm"
                                                 href="<?php echo $_SERVER['REQUEST_URI']; ?>&c=<?php echo $commentDB['id']; ?>&hide=true"
-                                                role="button">Hide</a>
+                                                role="button"><?php echo locale('hide'); ?></a>
                                         </div>
                                         <?php endif; ?>
                                     </div>
@@ -379,7 +379,7 @@ if (isset($_GET['c'])) {
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="declineApp">Reason for denial</h5>
+                                <h5 class="modal-title" id="declineApp"><?php echo locale('reasondenial'); ?></h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <i class="material-icons">close</i>
                                 </button>
@@ -390,14 +390,14 @@ if (isset($_GET['c'])) {
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <textarea class="form-control" rows="4" name="denial_reason"
-                                                    id="denial_reason" placeholder="Denial Reason" required></textarea>
+                                                    id="denial_reason" placeholder="<?php echo locale('denialreason'); ?>" required></textarea>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <button type="submit" name="declineApp" class="btn btn-danger">Decline</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo locale('cancel'); ?></button>
+                                    <button type="submit" name="declineApp" class="btn btn-danger"><?php echo locale('decline'); ?></button>
                                 </div>
                             </form>
                         </div>

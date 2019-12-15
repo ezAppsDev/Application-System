@@ -38,5 +38,5 @@ define("edit_usergroups", $group['edit_usergroups']);
 if (access === 'false') {
     session_unset();
     session_destroy();
-    notify('danger', 'You do not have access to this system.', DOMAIN.'/login?banned');
+    notify('danger', locale('bannedsystem'), DOMAIN.'/login?banned');
 }

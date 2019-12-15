@@ -1,8 +1,8 @@
 <?php
 session_name('ezApps');
 session_start();
-require 'tyler_base/global/connect.php';
-require 'tyler_base/global/config.php';
+require '../tyler_base/global/connect.php';
+require '../tyler_base/global/config.php';
 $page['name'] = locale('usermanage');
 
 if (!loggedIn) {
@@ -19,12 +19,12 @@ if (super_admin === 'false' && view_users === 'false') {
 <html lang="en">
 
 <head>
-    <?php require 'tyler_base/page/header.php'; ?>
+    <?php require '../tyler_base/page/header.php'; ?>
 </head>
 
 <body>
-    <?php require 'tyler_base/page/nav.php'; ?>
-    <?php require 'tyler_base/page/s-nav.php'; ?>
+    <?php require '../tyler_base/page/nav.php'; ?>
+    <?php require '../tyler_base/page/s-nav.php'; ?>
     <div class="lime-container">
         <div class="lime-body">
             <div class="container">
@@ -75,10 +75,10 @@ if (super_admin === 'false' && view_users === 'false') {
                 </div>
             </div>
         </div>
-        <?php require 'tyler_base/page/copyright.php'; ?>
+        <?php require '../tyler_base/page/copyright.php'; ?>
     </div>
 
-    <?php require 'tyler_base/page/footer.php'; ?>
+    <?php require '../tyler_base/page/footer.php'; ?>
 </body>
 
 </html>

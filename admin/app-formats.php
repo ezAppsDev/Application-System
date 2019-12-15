@@ -1,8 +1,8 @@
 <?php
 session_name('ezApps');
 session_start();
-require 'tyler_base/global/connect.php';
-require 'tyler_base/global/config.php';
+require '../tyler_base/global/connect.php';
+require '../tyler_base/global/config.php';
 $page['name'] = locale('appformats');
 
 if (!loggedIn) {
@@ -29,7 +29,7 @@ if (isset($_POST['createAppFormat'])) {
     $checkAppName->execute([$app_name]);
     $can_result = $checkAppName->fetch(PDO::FETCH_ASSOC);
     if ($can_result['num'] > 0) {
-        notify('danger', locale('appnameinuse'), DOMAIN.'/admin/formats');
+        notify('danger', locale('appnameinuse'), DOMAIN.'/admin/app-formats');
     } else {
         $sql1          = "INSERT INTO applications (name, format, created) VALUES (?,?,?)";
         $stmt1         = $pdo->prepare($sql1);
@@ -44,7 +44,7 @@ if (isset($_POST['createAppFormat'])) {
             // $stmt3 = $pdo->prepare($sql3);
             // $stmt3->execute();
             logger(locale('appformatcreatednotif').' - "'.$app_name.'"');
-            notify('success', locale('appformatcreatedalert'), DOMAIN.'/admin/formats');
+            notify('success', locale('appformatcreatedalert'), DOMAIN.'/admin/app-formats');
         }
     }
 }
@@ -63,7 +63,7 @@ if (isset($_POST['updateApp'])) {
         $checkAppName->execute([$app_name]);
         $can_result = $checkAppName->fetch(PDO::FETCH_ASSOC);
         if ($can_result['num'] > 0) {
-            notify('danger', locale('appnameinuse'), DOMAIN.'/admin/formats');
+            notify('danger', locale('appnameinuse'), DOMAIN.'/admin/app-formats');
         } else {
             $sql = "UPDATE applications SET name = ? WHERE id = ?";
             $pdo->prepare($sql)->execute([$app_name, $_SESSION['editing_app']]); 
@@ -74,7 +74,7 @@ if (isset($_POST['updateApp'])) {
         $sql = "UPDATE applications SET status = ? WHERE id = ?";
         $pdo->prepare($sql)->execute([$app_status, $_SESSION['editing_app']]); 
     }
-
+    sleep(2);
     if ($_SESSION['editing_app_desc'] <> $app_desc) {
         $sql = "UPDATE applications SET description = ? WHERE id = ?";
         $pdo->prepare($sql)->execute([$app_desc, $_SESSION['editing_app']]); 
@@ -86,7 +86,7 @@ if (isset($_POST['updateApp'])) {
     }
 
     logger(locale('editedappfromat').' - "'.$app_name.'" ('.$_SESSION['editing_app'].')');
-    notify('success', locale('appformatupdated'), DOMAIN.'/admin/formats');
+    notify('success', locale('appformatupdated'), DOMAIN.'/admin/app-formats');
 }
 
 //Delete app format
@@ -101,19 +101,19 @@ if (isset($_POST['deleteApp'])) {
 
     logger(locale('deletedappformatnotif').' - "'.$_SESSION['editing_app_name'].'" ('.$_SESSION['editing_app'].')');
 
-    notify('success', locale('deletedappformatalert'), DOMAIN.'/admin/formats');
+    notify('success', locale('deletedappformatalert'), DOMAIN.'/admin/app-formats');
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <?php require 'tyler_base/page/header.php'; ?>
+    <?php require '../tyler_base/page/header.php'; ?>
 </head>
 
 <body>
-    <?php require 'tyler_base/page/nav.php'; ?>
-    <?php require 'tyler_base/page/s-nav.php'; ?>
+    <?php require '../tyler_base/page/nav.php'; ?>
+    <?php require '../tyler_base/page/s-nav.php'; ?>
     <div class="lime-container">
         <div class="lime-body">
             <div class="container">
@@ -225,10 +225,10 @@ if (isset($_POST['deleteApp'])) {
                 </div>
             </div>
         </div>
-        <?php require 'tyler_base/page/copyright.php'; ?>
+        <?php require '../tyler_base/page/copyright.php'; ?>
     </div>
 
-    <?php require 'tyler_base/page/footer.php'; ?>
+    <?php require '../tyler_base/page/footer.php'; ?>
     <script type="text/javascript">
     $(document).ready(function() {
       $('.openAppEditorModal').on('click',function(){

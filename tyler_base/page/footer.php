@@ -3,7 +3,7 @@
         <script src="<?php echo DOMAIN; ?>/assets/plugins/bootstrap/popper.min.js"></script>
         <script src="<?php echo DOMAIN; ?>/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
         <script src="<?php echo DOMAIN; ?>/assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-        <?php if($page['name'] === 'View Applications' || $page['name'] === 'User Management'): ?>
+        <?php if($page['name'] === locale('viewapps') || $page['name'] === locale('usermanage')): ?>
         <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
         <script src="//cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 

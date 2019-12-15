@@ -68,12 +68,12 @@ function time_php2sql($unixtime){
 function demoAlert () {
     global $demo;
     if ($demo === true) {
-        echo '<div id="demoAlert"><div class="alert alert-info" role="alert">You are viewing this software in a limited demo version. Some features may be locked or removed in this demo version. To buy the full version, and host the software yourself, please vist <a href="https://discord.io/HydridSystems">https://discord.io/HydridSystems</a>. Typos and other issues will be fixed before release.</div></div>';
+        echo '<div id="demoAlert"><div class="alert alert-info" role="alert">'.locale('demoalert').'</div></div>';
     }
 }
 
 function demoBlock () {
-    echo '<div id="demoAlert"><div class="alert alert-danger" role="alert">Sorry, this feature has been blocked in demo mode for safety reasons. Please purchase the full version for access.</div></div>';
+    echo '<div id="demoAlert"><div class="alert alert-danger" role="alert">'.locale('demoblock').'</div></div>';
 }
 
 function getUserIP() {
@@ -117,7 +117,7 @@ function apps() {
         $curVer = json_decode($json);
         $newVer = $curVer->version;
         if ($newVer > $version) {
-            phpAlert("Oops. It seems that the version of ezApps this website runs is outdated. The ezApps development team does not support use of out dated software due to security reasons. If you are the website owner, please update the software as soon as possible at https://github.com/ezAppsDev/Application-System");
+            phpAlert(locale('outdated'));
         } else {
             setcookie("apps", 'set', time()+60);
         }
@@ -140,10 +140,10 @@ function locale($term) {
         if ($result) {
             return $result;
         } else {
-            return 'Locale Error';
+            return '[Locale Error]';
         }
     } else {
-        return 'Locale Error';
+        return '[Locale Error]';
     }
 
 
@@ -162,3 +162,18 @@ function logger($action) {
     $log    = $pdo->prepare($log);
     $log    = $log->execute([$_SESSION['user_id'], $datetime, $user_ip, $a]);
 }
+
+// Automated app format checker
+// function formatCheck ($id) {
+//     global $pdo;
+    
+//     $sql = "SELECT * FROM applicants WHERE id = ?";
+//     $stmt = $pdo->prepare($sql);
+//     $stmt->execute([$id]);
+//     $app = $stmt->fetch(PDO::FETCH_ASSOC);
+//     if(strpos($_SESSION['applying_for_format'], $app['format']) === false){
+//         // notify('success', '1', DOMAIN.'/apply');
+//         $sql = "UPDATE applicants SET status = ? WHERE id = ?";
+//         $pdo->prepare($sql)->execute(['DENIED', $id]);
+//     }
+// } 

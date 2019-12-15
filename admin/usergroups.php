@@ -1,8 +1,8 @@
 <?php
 session_name('ezApps');
 session_start();
-require 'tyler_base/global/connect.php';
-require 'tyler_base/global/config.php';
+require '../tyler_base/global/connect.php';
+require '../tyler_base/global/config.php';
 $page['name'] = locale('usergroupmanage');
 
 if (!loggedIn) {
@@ -54,20 +54,29 @@ if (isset($_POST['updateUsergroup'])) {
         }
     }
 
-    if (isset($_POST['perm_access'])) { //Is checked
-        $sql = "UPDATE usergroups SET access = ? WHERE id = ?";
-        $pdo->prepare($sql)->execute(['true', $_SESSION['editing_group']]);
-    } else { //Is not checked
-        $sql = "UPDATE usergroups SET access = ? WHERE id = ?";
-        $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);
-    }
-
-    if (isset($_POST['perm_super_admin'])) { //Is checked
-        $sql = "UPDATE usergroups SET super_admin = ? WHERE id = ?";
-        $pdo->prepare($sql)->execute(['true', $_SESSION['editing_group']]);
-    } else { //Is not checked
-        $sql = "UPDATE usergroups SET super_admin = ? WHERE id = ?";
-        $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);
+    if (super_admin === 'true') {	
+        if (isset($_POST['perm_access'])) { //Is checked	
+            $sql = "UPDATE usergroups SET access = ? WHERE id = ?";	
+            $pdo->prepare($sql)->execute(['true', $_SESSION['editing_group']]);	
+        } else { //Is not checked	
+            $sql = "UPDATE usergroups SET access = ? WHERE id = ?";	
+            $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);	
+        }	
+    	
+        if (isset($_POST['perm_super_admin'])) { //Is checked	
+            $sql = "UPDATE usergroups SET super_admin = ? WHERE id = ?";	
+            $pdo->prepare($sql)->execute(['true', $_SESSION['editing_group']]);	
+        } else { //Is not checked	
+            $sql = "UPDATE usergroups SET super_admin = ? WHERE id = ?";	
+            $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);	
+        }	
+        if (isset($_POST['perm_edit_usergroups'])) { //Is checked	
+            $sql = "UPDATE usergroups SET edit_usergroups = ? WHERE id = ?";	
+            $pdo->prepare($sql)->execute(['true', $_SESSION['editing_group']]);	
+        } else { //Is not checked	
+            $sql = "UPDATE usergroups SET edit_usergroups = ? WHERE id = ?";	
+            $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);	
+        }
     }
 
     if (isset($_POST['perm_view_apps'])) { //Is checked
@@ -110,28 +119,20 @@ if (isset($_POST['updateUsergroup'])) {
         $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);
     }
 
-    if (isset($_POST['perm_edit_usergroups'])) { //Is checked
-        $sql = "UPDATE usergroups SET edit_usergroups = ? WHERE id = ?";
-        $pdo->prepare($sql)->execute(['true', $_SESSION['editing_group']]);
-    } else { //Is not checked
-        $sql = "UPDATE usergroups SET edit_usergroups = ? WHERE id = ?";
-        $pdo->prepare($sql)->execute(['false', $_SESSION['editing_group']]);
-    }
-
     logger(locale('editedusergroupnotif').' - '.$group_name.' ('.$_SESSION['editing_group'].')');
-    notify('success', locale('usergroupupdated'), DOMAIN.'/admin/usergroups');
+    notify('success', locale('usergroupupdated').' <strong>'.locale('permslockednote').'</strong>', DOMAIN.'/admin/usergroups');
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <?php require 'tyler_base/page/header.php'; ?>
+    <?php require '../tyler_base/page/header.php'; ?>
 </head>
 
 <body>
-    <?php require 'tyler_base/page/nav.php'; ?>
-    <?php require 'tyler_base/page/s-nav.php'; ?>
+    <?php require '../tyler_base/page/nav.php'; ?>
+    <?php require '../tyler_base/page/s-nav.php'; ?>
     <div class="lime-container">
         <div class="lime-body">
             <div class="container">
@@ -227,10 +228,10 @@ if (isset($_POST['updateUsergroup'])) {
                 </div>
             </div>
         </div>
-        <?php require 'tyler_base/page/copyright.php'; ?>
+        <?php require '../tyler_base/page/copyright.php'; ?>
     </div>
 
-    <?php require 'tyler_base/page/footer.php'; ?>
+    <?php require '../tyler_base/page/footer.php'; ?>
     <script type="text/javascript">
     $(document).ready(function() {
         $('.openGroupEditorModal').on('click', function() {

@@ -1,8 +1,8 @@
 <?php
 session_name('ezApps');
 session_start();
-require 'tyler_base/global/connect.php';
-require 'tyler_base/global/config.php';
+require '../tyler_base/global/connect.php';
+require '../tyler_base/global/config.php';
 $page['name'] = locale('sitesettings');
 
 if (!loggedIn) {
@@ -46,7 +46,7 @@ if (isset($_POST['updateSettings'])) {
         $sql = "UPDATE settings SET wh_app_created = ? WHERE id = ?";
         $pdo->prepare($sql)->execute(['false', '1']);
     }
-
+    sleep(2);
     if (isset($_POST['wh_app_accepted'])) { //Is checked
         $sql = "UPDATE settings SET wh_app_accepted = ? WHERE id = ?";
         $pdo->prepare($sql)->execute(['true', '1']);
@@ -78,12 +78,12 @@ if (isset($_POST['updateSettings'])) {
 <html lang="en">
 
 <head>
-    <?php require 'tyler_base/page/header.php'; ?>
+    <?php require '../tyler_base/page/header.php'; ?>
 </head>
 
 <body>
-    <?php require 'tyler_base/page/nav.php'; ?>
-    <?php require 'tyler_base/page/s-nav.php'; ?>
+    <?php require '../tyler_base/page/nav.php'; ?>
+    <?php require '../tyler_base/page/s-nav.php'; ?>
     <div class="lime-container">
         <div class="lime-body">
             <div class="container">
@@ -170,9 +170,9 @@ if (isset($_POST['updateSettings'])) {
                 </div>
             </div>
         </div>
-        <?php require 'tyler_base/page/copyright.php'; ?>
+        <?php require '../tyler_base/page/copyright.php'; ?>
     </div>
-    <?php require 'tyler_base/page/footer.php'; ?>
+    <?php require '../tyler_base/page/footer.php'; ?>
 </body>
 
 </html>

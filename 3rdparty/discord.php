@@ -3,7 +3,7 @@ session_name('ezApps');
 session_start();
 require '../tyler_base/global/connect.php';
 require '../tyler_base/global/config.php';
-$page['name'] = 'Link Discord Account';
+$page['name'] = locale('linkdiscaccount');
 
 if (!loggedIn) {
     header('Location: '.DOMAIN.'/login');
@@ -18,7 +18,7 @@ $client_id = "CLIENT_ID";
 $client_secret = "CLIENT_SECRET";
 
 if (isset($_GET["error"])) {
-    notify('danger', 'Sorry! The Discord API experienced an error while attempting to link your account. Please try again.', DOMAIN.'/index');
+    notify('danger', locale('discordapierror'), DOMAIN.'/index');
 } elseif (isset($_GET["code"])) {
 	$redirect_uri = DOMAIN.'/3rdparty/discord.php';
 	$token_request = "https://discordapp.com/api/oauth2/token";
@@ -59,9 +59,9 @@ if (isset($_GET["error"])) {
 		$result = $pdo->prepare($sql)->execute([$_SESSION['discord_id'], 'https://cdn.discordapp.com/avatars/'.$_SESSION['discord_id'].'/'.$_SESSION['user_avatar'].'.png', $_SESSION['user_id']]); 	
 
 		if ($result) {
-			notify('success', 'Your discord account has been successfully linked to your ezApps account!', DOMAIN.'/index');
+			notify('success', locale('discordlinkagesuccess'), DOMAIN.'/index');
 		} else {
-			notify('danger', 'Sorry! We experienced an error while attempting to link your account. Please try again.', DOMAIN.'/index');
+			notify('danger', locale('discordlinkagerror'), DOMAIN.'/index');
 		}		
 	} else {
 		header("Location: https://discordapp.com/oauth2/authorize?client_id=$client_id&response_type=code&scope=identify");

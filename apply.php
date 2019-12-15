@@ -3,7 +3,7 @@ session_name('ezApps');
 session_start();
 require 'tyler_base/global/connect.php';
 require 'tyler_base/global/config.php';
-$page['name'] = 'Apply';
+$page['name'] = locale('apply');
 
 if (!loggedIn) {
     header('Location: '.DOMAIN.'/login');
@@ -20,17 +20,29 @@ if (isset($_POST['applyApp'])) {
 
     if ($webhook['app_created'] === 'true') {
         if ($user['discord_id'] <> NULL) {
-            discordAlert($user['display_name'] . ' (<@' . $user['discord_id'] . '>) created an application on ' . $datetime);
+            discordAlert($user['display_name'] . ' (<@' . $user['discord_id'] . '>) '.locale('createdanapp').' ' . $datetime);
         } else {
-            discordAlert($user['display_name'] . ' created an application on ' . $datetime);
+            discordAlert($user['display_name'] . ' '.locale('createdanapp') .' ' . $datetime);
         }        
     }
 
+    // if ($app_format > $_SESSION['applying_for_format']){
+    //     notify('success', '1', DOMAIN.'/apply');
+    // } else {
+    //     notify('success', '2', DOMAIN.'/apply');
+    // }
+
+    
     $sql1          = "INSERT INTO applicants (user, app, created, format) VALUES (?,?,?,?)";
     $stmt1         = $pdo->prepare($sql1);
     $result_ac   = $stmt1->execute([$_SESSION['user_id'], $_SESSION['applying_for'] , $datetime, $app_format]);
     if ($result_ac) {
-        notify('success', 'Your application has been submitted! Please allow us at least 48 hours for proper review. You may check on the status of yor application at any time on your home page.', DOMAIN.'/apply');
+        $rediID = $pdo->lastInsertID();
+        if(stripos($_SESSION['applying_for_format'], $app_format) !== false){
+            $sql = "UPDATE applicants SET status = ?, denial_reason = ? WHERE id = ?";
+            $pdo->prepare($sql)->execute(['DENIED', '['.locale('automatic').'] '.locale('failuretofollowformat').'<hr><strong>'.locale('declinedbysystem').'</strong>', $rediID]);
+        }
+        notify('success', locale('appsubmitted'), DOMAIN.'/app?id='.$rediID);
     }
 }
 ?>
@@ -52,13 +64,13 @@ if (isset($_POST['applyApp'])) {
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Available Applications</h5>
+                                <h5 class="card-title"><?php echo locale('availapps'); ?></h5>
                                 
                                 <?php if($dbCount['app_formats'] === 0): ?>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="alert alert-warning m-b-lg" role="alert">
-                                            No application formats are opened currently. Please check back later!
+                                        <?php echo locale('noformatsopen'); ?>
                                         </div>
                                     </div>
                                 </div>
@@ -80,7 +92,7 @@ if (isset($_POST['applyApp'])) {
                                                 
                                                 foreach ($appsDB as $appDB) {
                                                     echo '<tr><td>'.$appDB['name'].'</td>';
-                                                    echo '<td><a class="btn btn-success btn-sm openApplyModal" href="javascript:void(0);" data-href="'.DOMAIN.'/tyler_base/ajax/admin/applications/apply.php?appID='.$appDB['id'].'" role="button">Apply</a></td></tr>';
+                                                    echo '<td><a class="btn btn-success btn-sm openApplyModal" href="javascript:void(0);" data-href="'.DOMAIN.'/tyler_base/ajax/admin/applications/apply.php?appID='.$appDB['id'].'" role="button">'.locale('apply').'</a></td></tr>';
                                                 }
                                             ?>
                                         </tbody>
@@ -97,7 +109,7 @@ if (isset($_POST['applyApp'])) {
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="openApplyModal">Applying</h5>
+                                <h5 class="modal-title" id="openApplyModal"><?php echo locale('applying'); ?></h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <i class="material-icons">close</i>
                                 </button>

@@ -1,8 +1,8 @@
 <?php
 session_name('ezApps');
 session_start();
-require 'tyler_base/global/connect.php';
-require 'tyler_base/global/config.php';
+require '../tyler_base/global/connect.php';
+require '../tyler_base/global/config.php';
 $page['name'] = locale('viewapps');
 
 if (!loggedIn) {
@@ -22,12 +22,12 @@ $dbCount['applicants'] = $pdo->query('select count(*) from applicants')->fetchCo
 <html lang="en">
 
 <head>
-    <?php require 'tyler_base/page/header.php'; ?>
+    <?php require '../tyler_base/page/header.php'; ?>
 </head>
 
 <body>
-    <?php require 'tyler_base/page/nav.php'; ?>
-    <?php require 'tyler_base/page/s-nav.php'; ?>
+    <?php require '../tyler_base/page/nav.php'; ?>
+    <?php require '../tyler_base/page/s-nav.php'; ?>
     <div class="lime-container">
         <div class="lime-body">
             <div class="container">
@@ -110,10 +110,10 @@ $dbCount['applicants'] = $pdo->query('select count(*) from applicants')->fetchCo
                 </div>
             </div>
         </div>
-        <?php require 'tyler_base/page/copyright.php'; ?>
+        <?php require '../tyler_base/page/copyright.php'; ?>
     </div>
 
-    <?php require 'tyler_base/page/footer.php'; ?>
+    <?php require '../tyler_base/page/footer.php'; ?>
     <script type="text/javascript">
     $(document).ready(function() {
       $('.openAppEditorModal').on('click',function(){

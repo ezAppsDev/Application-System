@@ -31,7 +31,7 @@ $_SESSION['editing_app_desc'] = $appInfo['description'];
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-danger m-b-lg" role="alert">
-                No Permission.
+                <?php echo locale('noperms'); ?>
             </div>
         </div>
     </div>
@@ -40,31 +40,31 @@ $_SESSION['editing_app_desc'] = $appInfo['description'];
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="app_name">Application Name</label>
-                    <input type="text" class="form-control" name="app_name" id="app_name" placeholder="Application Name" value="<?php echo $appInfo['name']; ?>" required>
+                    <label for="app_name"><?php echo locale('appformatname'); ?></label>
+                    <input type="text" class="form-control" name="app_name" id="app_name" placeholder="<?php echo locale('appformatname'); ?>" value="<?php echo $appInfo['name']; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="app_status">Application Status</label>
+                    <label for="app_status"><?php echo locale('appstatus'); ?></label>
                     <select class="form-control" name="app_status" id="app_status" required>
-                        <option value="<?php echo $appInfo['status']; ?>" selected><?php echo $appInfo['status']; ?> (Current)</option>
-                        <option value="OPEN">OPEN</option>
-                        <option value="CLOSED">CLOSED</option>
-                        <option value="ON-HOLD">ON-HOLD</option>
+                        <option value="<?php echo $appInfo['status']; ?>" selected><?php echo $appInfo['status']; ?> (<?php echo locale('current'); ?>)</option>
+                        <option value="OPEN"><?php echo locale('open'); ?></option>
+                        <option value="CLOSED"><?php echo locale('closed'); ?></option>
+                        <option value="ON-HOLD"><?php echo locale('onhold'); ?></option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="app_format">Application Description</label>
-                    <textarea class="form-control" rows="4" name="app_desc" id="app_desc" placeholder="Application Description (or Requirements)" required><?php echo $appInfo['description']; ?></textarea>
+                    <label for="app_format"><?php echo locale('appdescription'); ?></label>
+                    <textarea class="form-control" rows="4" name="app_desc" id="app_desc" placeholder="<?php echo locale('appdescription'); ?>" required><?php echo $appInfo['description']; ?></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="app_format">Application Format</label>
-                    <textarea class="form-control" rows="4" name="app_format" id="app_format" placeholder="Application Format" required><?php echo $appInfo['format']; ?></textarea>
+                    <label for="app_format"><?php echo locale('appformat'); ?></label>
+                    <textarea class="form-control" rows="4" name="app_format" id="app_format" placeholder="<?php echo locale('appformat'); ?>" required><?php echo $appInfo['format']; ?></textarea>
                 </div>
             </div>
         </div>
         <hr>
-        <button type="submit" name="deleteApp" onclick="if(confirm('Are you sure you would like to delete this application format? All applications submitted will be lost, and can not be recovered.')){}else{return false;};" class="btn btn-danger btn-md float-left mb-3">Delete</button>
-        <button type="submit" name="updateApp" class="btn btn-primary btn-md float-right mb-3">Update</button>
+        <button type="submit" name="deleteApp" onclick="if(confirm('<?php echo locale('deleteappconfirm'); ?>')){}else{return false;};" class="btn btn-danger btn-md float-left mb-3"><?php echo locale('delete'); ?></button>
+        <button type="submit" name="updateApp" class="btn btn-primary btn-md float-right mb-3"><?php echo locale('update'); ?></button>
     </form>
     <?php endif; ?>
 </body>

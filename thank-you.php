@@ -3,7 +3,7 @@ session_name('ezApps');
 session_start();
 require 'tyler_base/global/connect.php';
 require 'tyler_base/global/config.php';
-$page['name'] = 'Thank You';
+$page['name'] = locale('thankyou');
 
 if (!loggedIn) {
     header('Location: '.DOMAIN.'/login');
@@ -30,11 +30,11 @@ if (!loggedIn) {
                             <div class="card-body">
                                 <div class="dashboard-info row">
                                     <div class="info-text col-md-6">
-                                        <h5 class="card-title">Development Credits</h5>
+                                        <h5 class="card-title"><?php echo locale('devcredits'); ?></h5>
                                         <ul>
-                                            <li>Project Manager - Tyler#7918</li>
+                                            <li><?php echo locale('projmanager'); ?> - Tyler#7918</li>
                                             <hr>
-                                            <li>DONATORS</li>
+                                            <li><?php echo locale('donators'); ?></li>
                                             <li>Indy Joy W.#9888</li>
                                             <li>Saiys#6795</li>
                                             <li>DXNCXX#1056</li>

@@ -3,7 +3,7 @@ session_name('ezApps');
 session_start();
 require 'tyler_base/global/connect.php';
 require 'tyler_base/global/config.php';
-$page['name'] = 'User Profile';
+$page['name'] = locale('userprofile');
 
 if (!loggedIn) {
     header('Location: '.DOMAIN.'/login');
@@ -19,7 +19,7 @@ if (isset($_GET['id'])) {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user === false) {
-        notify('danger', 'That user does not exist.', DOMAIN.'/index');
+        notify('danger', locale('usernotexist'), DOMAIN.'/index');
     } else {
         $_SESSION['profile_user_id'] = $user['id'];
         $_SESSION['profile_display_name'] = $user['display_name'];
@@ -52,16 +52,16 @@ if (isset($_POST['updateUserSettings'])) {
     $newPass     = strip_tags($_POST['newPass']);
 
     if (strlen($newPass) < 8) {
-        notify('danger', 'Your password must be longer than 8 characters.', DOMAIN.'/user?id='.$_SESSION['profile_user_id']);
+        notify('danger', locale('longerthan8'), DOMAIN.'/user?id='.$_SESSION['profile_user_id']);
     } elseif (!preg_match("#[0-9]+#", $newPass)) {
-        notify('danger', 'Your password must include at least one number.', DOMAIN.'/user?id='.$_SESSION['profile_user_id']);
+        notify('danger', locale('needsnumber'), DOMAIN.'/user?id='.$_SESSION['profile_user_id']);
     } elseif (!preg_match("#[a-zA-Z]+#", $newPass)) {
-        notify('danger', 'Your password must include at least one letter.', DOMAIN.'/user?id='.$_SESSION['profile_user_id']);
+        notify('danger', locale('needsletter'), DOMAIN.'/user?id='.$_SESSION['profile_user_id']);
     } else {
         $passwordHash = password_hash($newPass, PASSWORD_BCRYPT, array("cost" => 12));
         $sql = "UPDATE users SET password = ? WHERE id = ?";
         $pdo->prepare($sql)->execute([$passwordHash, $_SESSION['user_id']]);
-        notify('success', 'Settings updated.', DOMAIN.'/user?id='.$_SESSION['profile_user_id']);    
+        notify('success', locale('settingsupdated'), DOMAIN.'/user?id='.$_SESSION['profile_user_id']);    
     }
 }
 
@@ -72,7 +72,23 @@ if (isset($_POST['updateAdminUserSettings'])) {
 
     $sql = "UPDATE users SET usergroup = ? WHERE id = ?";
     $pdo->prepare($sql)->execute([$usergroup, $_SESSION['profile_user_id']]);
-    notify('success', 'User updated.', DOMAIN.'/user?id='.$_SESSION['profile_user_id']); 
+    logger(locale('changed').' '. $_SESSION['profile_display_name'] . ' (UID: ' . $_SESSION['profile_user_id'] . ')\'s '.locale('usergroup'));
+    notify('success', locale('userupdated'), DOMAIN.'/user?id='.$_SESSION['profile_user_id']); 
+}
+
+//Purge
+if (isset($_GET['purge'])) {
+    if ($_GET['purge'] === 'true') {
+        // Delete all applications
+        $sql = "DELETE FROM applicants WHERE user = ?";
+        $pdo->prepare($sql)->execute([$_SESSION['profile_user_id']]);
+        sleep(3);
+        // Delete all comments
+        $sql = "DELETE FROM applicant_comments WHERE user = ?";
+        $pdo->prepare($sql)->execute([$_SESSION['profile_user_id']]);
+        logger(locale('purged').' '. $_SESSION['profile_display_name'] . ' (UID: ' . $_SESSION['profile_user_id'] . ')');
+        notify('info', locale('userpurged'), DOMAIN.'/user?id='.$_SESSION['profile_user_id']); 
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -95,9 +111,10 @@ if (isset($_POST['updateAdminUserSettings'])) {
                         <div class="profile-header">
                             <div class="profile-img">
                                 <?php if($_SESSION['profile_avatar'] === NULL): ?>
-                                    <img src="<?php echo DOMAIN; ?>/assets/themes/<?php echo $config['theme']; ?>/images/avatars/placeholder.png">
+                                <img
+                                    src="<?php echo DOMAIN; ?>/assets/themes/<?php echo $config['theme']; ?>/images/avatars/placeholder.png">
                                 <?php else: ?>
-                                    <img src="<?php echo $_SESSION['profile_avatar']; ?>">
+                                <img src="<?php echo $_SESSION['profile_avatar']; ?>">
                                 <?php endif; ?>
                             </div>
                             <div class="profile-name">
@@ -110,26 +127,26 @@ if (isset($_POST['updateAdminUserSettings'])) {
                     <div class="col-xl-3">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">About</h5>
+                                <h5 class="card-title"><?php echo locale('about'); ?></h5>
                                 <ul class="list-unstyled profile-about-list">
-                                    <li><i class="material-icons">calendar_today</i><span>Joined:
+                                    <li><i class="material-icons">calendar_today</i><span><?php echo locale('joined'); ?>:
                                             <?php echo $_SESSION['profile_joined']; ?></span></li>
-                                    <li><i class="material-icons">group_add</i><span>Usergroup:
+                                    <li><i class="material-icons">group_add</i><span><?php echo locale('usergroup'); ?>:
                                             <?php echo $_SESSION['profile_usergroup_name']; ?></span></li>
-                                    <li><i class="material-icons">account_box</i><span>Discord ID:
+                                    <li><i class="material-icons">account_box</i><span><?php echo locale('discordid'); ?>:
                                             <?php echo $_SESSION['profile_discord_id']; ?></span></li>
                                     <?php if($_SESSION['profile_owner'] === 'true' || super_admin === 'true'): ?>
                                     <hr>
                                     <?php if(super_admin === 'true' && edit_users === 'false'): ?>
                                     <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
-                                        data-target="#adminUserSettings">Admin</button>
+                                        data-target="#adminUserSettings"><?php echo locale('admin'); ?></button>
                                     <!-- Admin User Settings Modal -->
                                     <div class="modal fade" id="adminUserSettings" tabindex="-1" role="dialog"
                                         aria-labelledby="adminUserSettings" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="adminUserSettings">Editing User</h5>
+                                                    <h5 class="modal-title" id="adminUserSettings"><?php echo locale('editinguser'); ?></h5>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-label="Close">
                                                         <i class="material-icons">close</i>
@@ -140,15 +157,16 @@ if (isset($_POST['updateAdminUserSettings'])) {
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
-                                                                <label class="col-form-label"
-                                                                        for="display_name">Display Name</label>
+                                                                    <label class="col-form-label"
+                                                                        for="display_name"><?php echo locale('displayname'); ?></label>
                                                                     <input type="text" class="form-control"
-                                                                        id="display_name" value="<?php echo $_SESSION['profile_display_name']; ?>"
+                                                                        id="display_name"
+                                                                        value="<?php echo $_SESSION['profile_display_name']; ?>"
                                                                         disabled>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label class="col-form-label"
-                                                                        for="usergroup">Usergroup</label>
+                                                                        for="usergroup"><?php echo locale('usergroup'); ?></label>
                                                                     <div class="form-group">
                                                                         <select name="usergroup" id="usergroup"
                                                                             class="form-control custom-select" required>
@@ -175,9 +193,15 @@ if (isset($_POST['updateAdminUserSettings'])) {
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Cancel</button>
+                                                            data-dismiss="modal"><?php echo locale('cancel'); ?></button>
+                                                        <?php if(super_admin === 'true'): ?>
+                                                        <a class="btn btn-danger"
+                                                            onclick="return confirm(<?php echo locale('purgeuserconfirm'); ?>)"
+                                                            href="<?php echo $_SERVER['REQUEST_URI']; ?>&purge=true"
+                                                            role="button"><?php echo locale('purge'); ?> *</a>
+                                                        <?php endif; ?>
                                                         <button type="submit" name="updateAdminUserSettings"
-                                                            class="btn btn-primary">Update</button>
+                                                            class="btn btn-primary"><?php echo locale('update'); ?></button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -186,14 +210,14 @@ if (isset($_POST['updateAdminUserSettings'])) {
                                     <?php endif; 
                                 if($_SESSION['profile_owner'] === 'true'): ?>
                                     <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                                        data-target="#userSettings">Settings</button>
+                                        data-target="#userSettings"><?php echo locale('settings'); ?></button>
                                     <!-- User Settings Modal -->
                                     <div class="modal fade" id="userSettings" tabindex="-1" role="dialog"
                                         aria-labelledby="userSettings" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="userSettings">Settings</h5>
+                                                    <h5 class="modal-title" id="userSettings"><?php echo locale('settings'); ?></h5>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-label="Close">
                                                         <i class="material-icons">close</i>
@@ -204,27 +228,29 @@ if (isset($_POST['updateAdminUserSettings'])) {
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
-                                                                <label class="col-form-label"
-                                                                        for="display_name">Display Name</label>
+                                                                    <label class="col-form-label"
+                                                                        for="display_name"><?php echo locale('displayname'); ?></label>
                                                                     <input type="text" class="form-control"
-                                                                        id="display_name" value="<?php echo $_SESSION['profile_display_name']; ?>"
+                                                                        id="display_name"
+                                                                        value="<?php echo $_SESSION['profile_display_name']; ?>"
                                                                         disabled>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                <label class="col-form-label"
-                                                                        for="newPass">New Password</label>
+                                                                <label class="col-form-label" for="newPass">
+                                                                        <?php echo locale('newpass'); ?></label>
                                                                     <input type="password" class="form-control"
                                                                         name="newPass" id="newPass"
-                                                                        placeholder="New Password..." autocomplete="new-password" required>
+                                                                        placeholder="<?php echo locale('newpass'); ?>..."
+                                                                        autocomplete="new-password" required>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Cancel</button>
+                                                            data-dismiss="modal"><?php echo locale('cancel'); ?></button>
                                                         <button type="submit" name="updateUserSettings"
-                                                            class="btn btn-primary">Update</button>
+                                                            class="btn btn-primary"><?php echo locale('update'); ?></button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -238,11 +264,11 @@ if (isset($_POST['updateAdminUserSettings'])) {
                     </div>
                     <div class="col-xl-9">
                         <?php if($dbCount['total_profile_apps'] === 0): ?>
-                            <div class="alert alert-warning m-b-lg" role="alert">
-                                <?php echo $_SESSION['profile_display_name']; ?> hasn't applied for anything yet!
-                            </div>
+                        <div class="alert alert-warning m-b-lg" role="alert">
+                            <?php echo $_SESSION['profile_display_name']; ?> <?php echo locale('notappliedyet'); ?>
+                        </div>
                         <?php else: ?>
-                            <?php 
+                        <?php 
                         $getUserAppliedDB = "SELECT * FROM applicants WHERE user = ? ORDER BY created DESC";
                         $getUserAppliedDB = $pdo->prepare($getUserAppliedDB);
                         $getUserAppliedDB->execute([$_SESSION['profile_user_id']]);
@@ -258,9 +284,10 @@ if (isset($_POST['updateAdminUserSettings'])) {
                                 <div class="post">
                                     <div class="post-header">
                                         <?php if($_SESSION['profile_avatar'] === NULL): ?>
-                                            <img src="<?php echo DOMAIN; ?>/assets/themes/<?php echo $config['theme']; ?>/images/avatars/placeholder.png">
+                                        <img
+                                            src="<?php echo DOMAIN; ?>/assets/themes/<?php echo $config['theme']; ?>/images/avatars/placeholder.png">
                                         <?php else: ?>
-                                            <img src="<?php echo $_SESSION['profile_avatar']; ?>">
+                                        <img src="<?php echo $_SESSION['profile_avatar']; ?>">
                                         <?php endif; ?>
                                         <div class="post-info">
                                             <span
@@ -269,8 +296,8 @@ if (isset($_POST['updateAdminUserSettings'])) {
                                         </div>
                                     </div>
                                     <div class="post-body">
-                                        <p>Created an application for "<?php echo $appInfoDB['name']; ?>"
-                                            <br />Current Status: <?php echo $appliedDB['status']; ?></p>
+                                        <p><?php echo locale('createdanappfor'); ?> "<?php echo $appInfoDB['name']; ?>"
+                                            <br /><?php echo locale('currentstatus'); ?>: <?php echo $appliedDB['status']; ?></p>
                                     </div>
                                 </div>
                             </div>
