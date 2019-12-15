@@ -135,7 +135,7 @@ function locale($term) {
                 $localeSetting = 'fr';
                 break;
         }
-        include 'tyler_base/locales/'.$localeSetting.'.php';
+        include 'locales/'.$localeSetting.'.php';
         $result = $localeDictionary[$term];
         if ($result) {
             return $result;
