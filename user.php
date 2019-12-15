@@ -72,7 +72,23 @@ if (isset($_POST['updateAdminUserSettings'])) {
 
     $sql = "UPDATE users SET usergroup = ? WHERE id = ?";
     $pdo->prepare($sql)->execute([$usergroup, $_SESSION['profile_user_id']]);
+    logger('Changed '. $_SESSION['profile_display_name'] . ' (UID: ' . $_SESSION['profile_user_id'] . ')\'s Usergroup');
     notify('success', 'User updated.', DOMAIN.'/user?id='.$_SESSION['profile_user_id']); 
+}
+
+//Purge
+if (isset($_GET['purge'])) {
+    if ($_GET['purge'] === 'true') {
+        // Delete all applications
+        $sql = "DELETE FROM applicants WHERE user = ?";
+        $pdo->prepare($sql)->execute([$_SESSION['profile_user_id']]);
+        sleep(3);
+        // Delete all comments
+        $sql = "DELETE FROM applicant_comments WHERE user = ?";
+        $pdo->prepare($sql)->execute([$_SESSION['profile_user_id']]);
+        logger('Purged '. $_SESSION['profile_display_name'] . ' (UID: ' . $_SESSION['profile_user_id'] . ')');
+        notify('info', 'User Purged.', DOMAIN.'/user?id='.$_SESSION['profile_user_id']); 
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -95,9 +111,10 @@ if (isset($_POST['updateAdminUserSettings'])) {
                         <div class="profile-header">
                             <div class="profile-img">
                                 <?php if($_SESSION['profile_avatar'] === NULL): ?>
-                                    <img src="<?php echo DOMAIN; ?>/assets/themes/<?php echo $config['theme']; ?>/images/avatars/placeholder.png">
+                                <img
+                                    src="<?php echo DOMAIN; ?>/assets/themes/<?php echo $config['theme']; ?>/images/avatars/placeholder.png">
                                 <?php else: ?>
-                                    <img src="<?php echo $_SESSION['profile_avatar']; ?>">
+                                <img src="<?php echo $_SESSION['profile_avatar']; ?>">
                                 <?php endif; ?>
                             </div>
                             <div class="profile-name">
@@ -140,10 +157,11 @@ if (isset($_POST['updateAdminUserSettings'])) {
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
-                                                                <label class="col-form-label"
+                                                                    <label class="col-form-label"
                                                                         for="display_name">Display Name</label>
                                                                     <input type="text" class="form-control"
-                                                                        id="display_name" value="<?php echo $_SESSION['profile_display_name']; ?>"
+                                                                        id="display_name"
+                                                                        value="<?php echo $_SESSION['profile_display_name']; ?>"
                                                                         disabled>
                                                                 </div>
                                                                 <div class="form-group">
@@ -176,6 +194,12 @@ if (isset($_POST['updateAdminUserSettings'])) {
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Cancel</button>
+                                                        <?php if(super_admin === 'true'): ?>
+                                                        <a class="btn btn-danger"
+                                                            onclick="return confirm('Are you sure you want to purge this user? This wil delete all applications, comments, etc. This should only be used to remove spam. THIS CAN NOT BE UNDONE.')"
+                                                            href="<?php echo $_SERVER['REQUEST_URI']; ?>&purge=true"
+                                                            role="button">Purge *</a>
+                                                        <?php endif; ?>
                                                         <button type="submit" name="updateAdminUserSettings"
                                                             class="btn btn-primary">Update</button>
                                                     </div>
@@ -204,18 +228,20 @@ if (isset($_POST['updateAdminUserSettings'])) {
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
-                                                                <label class="col-form-label"
+                                                                    <label class="col-form-label"
                                                                         for="display_name">Display Name</label>
                                                                     <input type="text" class="form-control"
-                                                                        id="display_name" value="<?php echo $_SESSION['profile_display_name']; ?>"
+                                                                        id="display_name"
+                                                                        value="<?php echo $_SESSION['profile_display_name']; ?>"
                                                                         disabled>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                <label class="col-form-label"
-                                                                        for="newPass">New Password</label>
+                                                                    <label class="col-form-label" for="newPass">New
+                                                                        Password</label>
                                                                     <input type="password" class="form-control"
                                                                         name="newPass" id="newPass"
-                                                                        placeholder="New Password..." autocomplete="new-password" required>
+                                                                        placeholder="New Password..."
+                                                                        autocomplete="new-password" required>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -238,11 +264,11 @@ if (isset($_POST['updateAdminUserSettings'])) {
                     </div>
                     <div class="col-xl-9">
                         <?php if($dbCount['total_profile_apps'] === 0): ?>
-                            <div class="alert alert-warning m-b-lg" role="alert">
-                                <?php echo $_SESSION['profile_display_name']; ?> hasn't applied for anything yet!
-                            </div>
+                        <div class="alert alert-warning m-b-lg" role="alert">
+                            <?php echo $_SESSION['profile_display_name']; ?> hasn't applied for anything yet!
+                        </div>
                         <?php else: ?>
-                            <?php 
+                        <?php 
                         $getUserAppliedDB = "SELECT * FROM applicants WHERE user = ? ORDER BY created DESC";
                         $getUserAppliedDB = $pdo->prepare($getUserAppliedDB);
                         $getUserAppliedDB->execute([$_SESSION['profile_user_id']]);
@@ -258,9 +284,10 @@ if (isset($_POST['updateAdminUserSettings'])) {
                                 <div class="post">
                                     <div class="post-header">
                                         <?php if($_SESSION['profile_avatar'] === NULL): ?>
-                                            <img src="<?php echo DOMAIN; ?>/assets/themes/<?php echo $config['theme']; ?>/images/avatars/placeholder.png">
+                                        <img
+                                            src="<?php echo DOMAIN; ?>/assets/themes/<?php echo $config['theme']; ?>/images/avatars/placeholder.png">
                                         <?php else: ?>
-                                            <img src="<?php echo $_SESSION['profile_avatar']; ?>">
+                                        <img src="<?php echo $_SESSION['profile_avatar']; ?>">
                                         <?php endif; ?>
                                         <div class="post-info">
                                             <span

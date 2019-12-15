@@ -5,9 +5,3 @@ RewriteRule ^(.*)/$ /$1 [L,R=301]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.*)$ $1.php [NC,L]
-
-RewriteRule ^admin/formats$ admin-formats.php [L]
-RewriteRule ^admin/view$ admin-view.php [L]
-RewriteRule ^admin/settings$ admin-settings.php [L]
-RewriteRule ^admin/usergroups$ admin-usergroups.php [L]
-RewriteRule ^admin/users$ admin-users.php [L]

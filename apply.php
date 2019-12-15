@@ -26,11 +26,22 @@ if (isset($_POST['applyApp'])) {
         }        
     }
 
+    // if ($app_format > $_SESSION['applying_for_format']){
+    //     notify('success', '1', DOMAIN.'/apply');
+    // } else {
+    //     notify('success', '2', DOMAIN.'/apply');
+    // }
+
     $sql1          = "INSERT INTO applicants (user, app, created, format) VALUES (?,?,?,?)";
     $stmt1         = $pdo->prepare($sql1);
     $result_ac   = $stmt1->execute([$_SESSION['user_id'], $_SESSION['applying_for'] , $datetime, $app_format]);
     if ($result_ac) {
-        notify('success', 'Your application has been submitted! Please allow us at least 48 hours for proper review. You may check on the status of yor application at any time on your home page.', DOMAIN.'/apply');
+        $rediID = $pdo->lastInsertID();
+        if(stripos($_SESSION['applying_for_format'], $app_format) !== false){
+            $sql = "UPDATE applicants SET status = ?, denial_reason = ? WHERE id = ?";
+            $pdo->prepare($sql)->execute(['DENIED', '[AUTOMATIC] Failure to follow format.<hr><strong>Declined by System</strong>', $rediID]);
+        }
+        notify('success', 'Your application has been submitted! Please allow us at least 48 hours for proper review. You may check on the status of yor application at any time on your home page.', DOMAIN.'/app?id='.$rediID);
     }
 }
 ?>

@@ -14,20 +14,19 @@
                 <li>
                     <a href="<?php echo DOMAIN; ?>/thank-you"><i class="material-icons">star</i>Credit</a>
                 </li>
-                <?php if (super_admin === 'true'): ?>
+                <?php if (super_admin === 'true' || view_apps === 'true' || review_apps === 'true' || view_users === 'true' || view_usergroups === 'true' || edit_users === 'true' || edit_usergroups === 'true'): ?>
                 <li class="sidebar-title">
                 Admin
                 </li>
-                <?php if(super_admin === 'true'): ?>
                 <li>
                     <a href="#"><i class="material-icons">description</i>Applications<i
                             class="material-icons has-sub-menu">keyboard_arrow_left</i></a>
                     <ul class="sub-menu">
                         <li>
-                            <a href="<?php echo DOMAIN; ?>/admin/formats">Formats</a>
+                            <a href="<?php echo DOMAIN; ?>/admin/app-formats">Formats</a>
                         </li>
                         <li>
-                            <a href="<?php echo DOMAIN; ?>/admin/view">View</a>
+                            <a href="<?php echo DOMAIN; ?>/admin/apps">View</a>
                         </li>
                     </ul>
                 </li>
@@ -46,7 +45,6 @@
                 <li>
                     <a href="<?php echo DOMAIN; ?>/admin/settings"><i class="material-icons">settings</i>Settings</a>
                 </li>
-                <?php endif; ?>
                 <?php endif; ?>
             </ul>
         </div>

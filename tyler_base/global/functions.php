@@ -137,3 +137,19 @@ function logger($action) {
     $log    = $pdo->prepare($log);
     $log    = $log->execute([$_SESSION['user_id'], $datetime, $user_ip, $a]);
 }
+
+// Automated app format checker
+// function formatCheck ($id) {
+//     global $pdo;
+    
+//     $sql = "SELECT * FROM applicants WHERE id = ?";
+//     $stmt = $pdo->prepare($sql);
+//     $stmt->execute([$id]);
+//     $app = $stmt->fetch(PDO::FETCH_ASSOC);
+
+//     if(strpos($_SESSION['applying_for_format'], $app['format']) === false){
+//         // notify('success', '1', DOMAIN.'/apply');
+//         $sql = "UPDATE applicants SET status = ? WHERE id = ?";
+//         $pdo->prepare($sql)->execute(['DENIED', $id]);
+//     }
+// }
